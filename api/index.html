@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="obtenerUsuarios">Obtener usuarios</button>
+    <script>
+        const API_URL = "http://localhost/AirRestaurant/api/api.php";
+
+        async function getUsers(){
+
+            const respuesta = await fetch(API_URL);
+            const datos = await respuesta.json();
+            console.log(datos);
+        }
+        async function addUsers(){
+            const datos = {
+                'id':1, 
+                'nombre':"Pepe"
+            }
+            const respuesta = await fetch(API_URL,{
+                method: 'POST',
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(datos)
+            });
+        }
+        document.getElementById("obtenerUsuarios").addEventListener("click",getUsers)
+    </script>
+</body>
+</html>

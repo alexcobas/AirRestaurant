@@ -1,0 +1,319 @@
+.icon-24 {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+}
+.icon-24-dark {
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+  color: white;
+}
+
+.logoSuperior {
+  width: 60px;
+}
+
+.banner {
+  background-image: url('../img/banner.png');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  height: 600px;
+}
+
+.banner-dark-overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.nav-link.active {
+  border-bottom: 2px solid #000000;
+}
+
+@media (max-width: 991px) {
+  .nav-link.active {
+      border-bottom: none;
+  }
+}
+
+.menu-section {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+.line-border {
+  border: 0;
+  border-top: 2px solid #D9D9D9;
+  margin: 10px 0 0 0;
+  width: 100%;
+}
+
+.menu-item-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #555;
+  padding: 5px 0;
+  transition: color 0.3s, border-color 0.3s, transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  margin-right: 32px;
+  text-decoration: none;
+}
+
+.menu-item-flex:last-child {
+  margin-right: 0;
+}
+
+.menu-item-flex img {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 5px;
+  transition: filter 0.3s ease;
+}
+
+.menu-item-flex p {
+  margin: 0;
+  font-size: 0.75rem;
+}
+
+/* Estilo cuando el item está activo */
+.menu-item-flex.active {
+  color: #222222;
+  border-bottom: 2px solid #222222;
+  text-decoration: none;
+}
+
+.menu-item-flex.active:hover {
+  border-bottom: 0;
+}
+
+/* Efecto hover cuando no es activo ni seleccionado */
+.menu-item-flex:not(.active):not(.selected):hover {
+  color: #222222;
+}
+
+/* Cambiar el color del ícono en hover cuando no es activo ni seleccionado */
+.menu-item-flex:not(.active):not(.selected):hover img {
+  filter: brightness(0);
+}
+
+/* Efecto de línea solo en hover cuando no es seleccionado */
+.menu-item-flex:not(.selected)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #ddd; 
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.menu-item-flex:not(.selected):hover::after {
+  transform: scaleX(1); 
+}
+
+/* Prevenir la línea en el hover si el elemento está seleccionado */
+.menu-item-flex.selected::after {
+  transform: none;
+}
+
+/* Estilo para la clase selected */
+.menu-item-flex.selected {
+  color: #000;
+  border-bottom: 2px solid #000;
+}
+
+/* Aplicar filtro negro a la imagen cuando el item tiene la clase selected */
+.menu-item-flex.selected img {
+  filter: brightness(0);
+}
+
+/* Prevenir hover en seleccionados */
+.menu-item-flex.selected:hover::after {
+  transform: scaleX(0);
+}
+
+.menu-item-flex .pressed {
+  transform: scale(0.95);
+}
+
+.menu-item-flex img.pressed {
+  transform: scale(0.95);
+}
+
+.menu-item-flex p.pressed {
+  transform: scale(0.95);
+}
+
+.menu-item-flex p,
+.menu-item-flex img {
+  transition: transform 0.2s ease, color 0.3s ease, border-bottom 0.3s ease;
+}
+.boton-carrousel{
+  color: black;
+  background-color: white;
+  border-radius: 100%;
+}
+.carousel-control-next, .carousel-control-prev{
+  opacity: 0;
+}
+.carousel-indicators {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin-right: 15%;
+  margin-bottom: 0rem;
+  margin-left: 15%;
+}
+.carousel-indicators [data-bs-target] {
+  box-sizing: content-box;
+  flex: 0 1 auto;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border-radius: 100%;
+  margin-right: 3px;
+  margin-left: 3px;
+  text-indent: -999px;
+  cursor: pointer;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  opacity: 0.5;
+  transition: opacity 0.6s ease;
+}
+.carousel-indicators .active {
+  opacity: 1;
+}
+.card-body{
+  padding: 1rem 0 1rem 0;
+}
+.rounded-12 {
+  border-radius: 12px;
+}
+
+.carousel-inner:hover ~ button{
+  opacity: 1;
+}
+.search-container {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 50px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 5px 10px;
+  max-width: 400px;
+  width: 100%;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  border-radius: 50px;
+  padding: 10px 15px;
+  font-size: 16px;
+}
+
+.search-button {
+  background-color: #ff385c; /* Color de Airbnb */
+  border: none;
+  outline: none;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #e63950;
+}
+
+.search-button img {
+  width: 20px;
+  height: 20px;
+}
+.bi-person-circle::before{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#customDropdown {
+  border: 1px solid #e0e0e0;
+  border-radius: 50px;
+  padding: 8px;
+  gap: 2px;
+  display: inline-flex;
+  align-items: center;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+#customDropdown .icon-24 {
+  font-size: 24px;
+  color: #555555;
+}
+
+#customDropdown .icon-24:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+}
+#numProducts {
+  position: relative;
+  top: -10px;
+  left: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8px;
+  min-width: 18px;
+  height: 18px;
+  background-color: #FF385C;
+  color: white;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+#numProducts p {
+  margin: 0;         /* Eliminar márgenes del <p> */
+  line-height: 1;    /* Ajustar la altura de línea para centrar el texto */
+}
+#alert-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1050;
+  background-color: rgba(173, 255, 173, 0.8); 
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+  opacity: 0; /* Inicialmente invisible */
+  pointer-events: none; /* Evita que interfiera cuando no se ve */
+  transition: opacity 0.5s ease-in-out; /* Transición para suavidad */
+}
+#alert-container.show {
+  opacity: 1;
+  pointer-events: auto; /* Habilita la interacción si es necesario */
+}
