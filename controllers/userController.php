@@ -3,6 +3,11 @@ include_once("models/User.php");
 include_once("models/UsersDAO.php");
 class userController{
 
+    public function index(){
+        $view = "views/users/index.php";
+        include_once("views/main.php");
+    }
+
     public function store(){
         if(isset($_POST["controller"])){
             $controller = $_POST["controller"];
@@ -57,7 +62,13 @@ class userController{
         }
         session_start();
         $_SESSION["user"] = $user;
-        header("Location: " . url . "$controller/dashboard");
+        header("Location: " . url . "$controller/");
+    }
+
+    public function logout(){
+        session_start();
+        session_destroy();
+        header("Location: " . url . "home/");
     }
     
 }

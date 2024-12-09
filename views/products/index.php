@@ -1,4 +1,5 @@
 <?php
+session_start();
 $filter = null;
 if (isset($_GET['filter'])) {
   $filter = (int)$_GET['filter'];
@@ -17,7 +18,7 @@ if (isset($_GET['filterName'])) {
   });
 }
 ?>
-<section class="fixed-top bg-white">
+<header class="fixed-top bg-white">
     <nav class="navbar navbar-expand-lg container mt-0">
         <div class="container-fluid">
             <a class="navbar-brand" href="<?=url?>home/">
@@ -52,20 +53,28 @@ if (isset($_GET['filterName'])) {
                             <i class="bi bi-person-circle icon-24"></i>
                         </div>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="customDropdown" style="right: 0; left: auto; transform-origin: right top;">
+                          <?php if(empty($_SESSION["user"])){?>
                             <li><a class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#loginModal">Iniciar sesión</a></li>
                             <li><a class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">Regístrate</a></li>
+                          <?php } else{?>
+                            <li><a class="dropdown-item" href="<?=url?>user/">Cuenta</a></li>
+                            <li><a class="dropdown-item" href="<?=url?>user/order">Ver mis pedidos</a></li>
+                          <?php }?>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#">Tarjetas regalo</a></li>
                             <li><a class="dropdown-item" href="#">Pon tu casa en Airbnb</a></li>
                             <li><a class="dropdown-item" href="#">Ofrece una experiencia</a></li>
                             <li><a class="dropdown-item" href="#">Centro de ayuda</a></li>
+                          <?php if(!empty($_SESSION["user"])){?>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="<?=url?>user/logout">Cerrar sesion</a></li>
+                          <?php }?>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
     </nav>
-    <!--  -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
         <div class="offcanvas-header">
             <h5 id="cartOffcanvasLabel">Carrito de Compras</h5>
@@ -112,28 +121,28 @@ if (isset($_GET['filterName'])) {
       </div>
     </div>
     <hr class="line-border">
-<div class="container menu-section-extended mt-4">
-  <div class="row row-left-align m-0">
-    <a href="<?=url?>product/index?filter=0" class="col-auto menu-item-flex <?=($filter === null ? 'selected' : '')?>">
-      <img src="<?=url ?>img/iRestaurant.svg" class="icon-24 <?=($filter === null ? 'active' : '') ?>" alt="Nuestro Menú icono">
-      <p class="<?=($filter === null ? 'active' : '') ?>">Nuestro Menú</p>
-    </a>
-    <?php
-    if (!empty($categories)) {
-      foreach ($categories as $category) { ?>
-        <a href="<?= url ?>product/index?filter=<?= $category->getId() ?>" 
-           class="col-auto menu-item-flex <?= $filter === $category->getId() ? 'selected' : ''; ?>">
-            <img src="<?= url ?>img/<?= $category->getIcon() ?>" alt="<?= $category->getTitle() ?> icon" class="icon-24 <?= $filter === $category->getId() ? 'active' : ''; ?>">
-            <p class="<?= $filter === $category->getId() ? 'active' : ''; ?>"><?= $category->getTitle() ?></p>
+    <div class="container menu-section-extended mt-4">
+      <div class="row row-left-align m-0">
+        <a href="<?=url?>product/index?filter=0" class="col-auto menu-item-flex <?=($filter === null ? 'selected' : '')?>">
+          <img src="<?=url ?>img/iRestaurant.svg" class="icon-24 <?=($filter === null ? 'active' : '') ?>" alt="Nuestro Menú icono">
+          <p class="<?=($filter === null ? 'active' : '') ?>">Nuestro Menú</p>
         </a>
-      <?php
-      }
-    } else { ?>
-      <p>No hay categorías disponibles.</p>';
-    <?php }?>
-  </div>
-</div>
-</section>
+        <?php
+        if (!empty($categories)) {
+          foreach ($categories as $category) { ?>
+            <a href="<?= url ?>product/index?filter=<?= $category->getId() ?>" 
+              class="col-auto menu-item-flex <?= $filter === $category->getId() ? 'selected' : ''; ?>">
+                <img src="<?= url ?>img/<?= $category->getIcon() ?>" alt="<?= $category->getTitle() ?> icon" class="icon-24 <?= $filter === $category->getId() ? 'active' : ''; ?>">
+                <p class="<?= $filter === $category->getId() ? 'active' : ''; ?>"><?= $category->getTitle() ?></p>
+            </a>
+          <?php
+          }
+        } else { ?>
+          <p>No hay categorías disponibles.</p>';
+        <?php }?>
+      </div>
+    </div>
+</header>
 
 <section class="container my-5">
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-5 g-4">
