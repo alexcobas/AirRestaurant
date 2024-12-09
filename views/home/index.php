@@ -221,8 +221,8 @@
         <?php }?>
     </div>
 </section>
-
-<footer class="bg-light py-4 mt-5">
+<hr class="w-100 mt-5 mb-0">
+<footer class="bg-light py-4">
     <div class="container">
         <div class="row">
             <div class="col-md-3">
