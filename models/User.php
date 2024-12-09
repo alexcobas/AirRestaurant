@@ -5,7 +5,7 @@ class User{
     private $name;
     private $surnames;
     private $email;
-    private $pasword_hash;
+    private $password_hash;
     private $role;
     private $img_profile;
 
@@ -112,9 +112,9 @@ class User{
     /**
      * Get the value of pasword_hash
      */ 
-    public function getPasword_hash()
+    public function getPassword_hash()
     {
-        return $this->pasword_hash;
+        return $this->password_hash;
     }
 
     /**
@@ -122,9 +122,9 @@ class User{
      *
      * @return  self
      */ 
-    public function setPasword_hash($pasword_hash)
+    public function setPassword_hash($pasword_hash)
     {
-        $this->pasword_hash = $pasword_hash;
+        $this->password_hash = $pasword_hash;
 
         return $this;
     }

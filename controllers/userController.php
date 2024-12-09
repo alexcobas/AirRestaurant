@@ -2,14 +2,6 @@
 include_once("models/User.php");
 include_once("models/UsersDAO.php");
 class userController{
-    public function show(){
-        if(isset($_GET['id'])){
-            $id = $_GET['id'];
-            include_once("views/ingredients/show.php");
-        } else {
-            echo "No hay una id.";
-        }
-    }
 
     public function store(){
         if(isset($_POST["controller"])){
@@ -39,7 +31,7 @@ class userController{
         $user->setName($_POST["name"]);
         $user->setSurnames($_POST["surnames"]);
         $user->setEmail($_POST["email"]);
-        $user->setPasword_hash($password_hash);
+        $user->setPassword_hash($password_hash);
         $user->setRole("user");
         UsersDAO::store($user);
         header("Location: " . url . "$controller/");
@@ -58,6 +50,7 @@ class userController{
             exit();
         }
         $user = UsersDAO::getUserByEmail($email);
+        var_dump($user->getPassword_hash());
         if (!password_verify($password, $user->getPassword_hash())) {
             header("Location: " . url . "$controller/index?errorLogin=La contraseña es incorrecta.");
             exit();

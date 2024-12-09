@@ -201,7 +201,7 @@ if (isset($_GET['filterName'])) {
             </div>
             <div class="modal-body">
                 <h4 class="text-center my-4">¡Te damos la bienvenida a AirRestaurant!</h4>
-                <form action="your-login-endpoint.php" method="post">
+                <form action="?controller=user&action=login" method="post">
                     <div class="mb-3">
                         <label for="email" class="form-label">Correo electrónico</label>
                         <input type="email" class="form-control" id="email" name="email" required>
