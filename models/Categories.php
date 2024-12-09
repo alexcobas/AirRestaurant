@@ -4,6 +4,7 @@ class Categories{
     private $title;
     private $name;
     private $icon;
+    private $img;
     
 
     /**
@@ -82,6 +83,26 @@ class Categories{
     public function setIcon($icon)
     {
         $this->icon = $icon;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of img
+     */ 
+    public function getImg()
+    {
+        return $this->img;
+    }
+
+    /**
+     * Set the value of img
+     *
+     * @return  self
+     */ 
+    public function setImg($img)
+    {
+        $this->img = $img;
 
         return $this;
     }

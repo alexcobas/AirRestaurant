@@ -19,7 +19,8 @@
   background-size: cover;
   background-position: center;
   position: relative;
-  height: 600px;
+  height: 90vh;
+  /* height: 600px; */
 }
 
 .banner-dark-overlay {
@@ -316,4 +317,53 @@
 #alert-container.show {
   opacity: 1;
   pointer-events: auto; /* Habilita la interacción si es necesario */
+}
+.categories-hover-scale {
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;  /* Añadido box-shadow a la transición */
+}
+
+.categories-hover-scale:hover {
+  transform: scale(1.05); 
+}
+
+.img-history{
+  width: 25rem; 
+  height: 25rem; 
+  object-fit: cover;
+}
+
+.img-categories{
+  width: 60px; 
+  height: 60px; 
+  object-fit: cover;
+}
+
+.modal-content {
+  border-radius: 15px;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header .modal-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+button[type="submit"] {
+  background: linear-gradient(to right, #F22D5D, #D70566);
+  border: none;
+  color: white;
+  font-weight: bold;
+}
+
+button[type="submit"]:hover {
+  background: linear-gradient(to right, #F22D5D, #D70566);
+}
+
+.errorMessage{
+  width: 100%;
+  margin-top: .25rem;
+  font-size: .875em;
+  color: var(--bs-form-invalid-color);
 }

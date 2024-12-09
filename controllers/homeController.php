@@ -1,6 +1,7 @@
 <?php
 class homeController{
     public function index(){
+        $categories = CategoriesDAO::getAll();
         $view = "views/home/index.php";
         include_once("views/main.php");
     }

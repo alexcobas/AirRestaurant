@@ -16,6 +16,12 @@
 <body>
     <?php include_once $view; ?>
     <script src="<?=url?>/js/dinamicMargin.js"></script>
+    <?php if(isset($_GET["errorRegister"])){?>
+        <script src="<?= url ?>js/openRegister.js"></script>
+    <?php }?> 
+    <?php if(isset($_GET["errorLogin"])){?>
+        <script src="<?= url ?>js/openLogin.js"></script>
+    <?php } ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 

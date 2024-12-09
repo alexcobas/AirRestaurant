@@ -52,8 +52,8 @@ if (isset($_GET['filterName'])) {
                             <i class="bi bi-person-circle icon-24"></i>
                         </div>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="customDropdown" style="right: 0; left: auto; transform-origin: right top;">
-                            <li><a class="dropdown-item" href="#"  data-bs-toggle="modal" data-bs-target="#loginModal">Iniciar sesión</a></li>
-                            <li><a class="dropdown-item" href="#">Regístrate</a></li>
+                            <li><a class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#loginModal">Iniciar sesión</a></li>
+                            <li><a class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">Regístrate</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#">Tarjetas regalo</a></li>
                             <li><a class="dropdown-item" href="#">Pon tu casa en Airbnb</a></li>
@@ -65,36 +65,7 @@ if (isset($_GET['filterName'])) {
             </div>
         </div>
     </nav>
-    <!-- <div class="modal fade" id="loginModal" tabindex="1" aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="loginModalLabel">Iniciar Sesión</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="your-login-endpoint.php" method="post">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Correo electrónico</label>
-                            <input type="email" class="form-control" id="username" name="username" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <input type="checkbox" id="remember" name="remember">
-                                <label for="remember" class="form-check-label">Recordarme</label>
-                            </div>
-                            <a href="#" class="text-decoration-none">¿Olvidaste tu contraseña?</a>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100 mt-3">Iniciar sesión</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div> -->
+    <!--  -->
     <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
         <div class="offcanvas-header">
             <h5 id="cartOffcanvasLabel">Carrito de Compras</h5>
@@ -221,8 +192,88 @@ if (isset($_GET['filterName'])) {
     <?php }?>
   </div>
 </section>
-<div id="alert-container" class="pt-3 pb-3">
+<section class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title" id="loginModalLabel">Inicia sesión o regístrate</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4 class="text-center my-4">¡Te damos la bienvenida a AirRestaurant!</h4>
+                <form action="your-login-endpoint.php" method="post">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Correo electrónico</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <input type="checkbox" id="remember" name="remember">
+                            <label for="remember" class="form-check-label">Recordarme</label>
+                        </div>
+                        <a href="#" class="text-decoration-none">¿Olvidaste tu contraseña?</a>
+                    </div>
+                    <?php if(isset($_GET["errorLogin"])){?>
+                      <p class="errorMessage"><?=$_GET["errorLogin"]?></p>
+                    <?php }?>
+                    <input type="hidden" value="product" name="controller">
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Iniciar sesión</button>
+                </form>
+                <p class="text-center mt-3">¿No tienes cuenta? <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-dismiss="modal">Regístrate aquí</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerModalLabel">Crea tu cuenta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="?controller=user&action=store" method="post">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Nombre de usuario</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="surnames" class="form-label">Apellidos</label>
+                        <input type="text" class="form-control" id="surnames" name="surnames" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Correo electrónico</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                    </div>
+                    <?php if(isset($_GET["errorRegister"])){?>
+                      <p class="errorMessage"><?=$_GET["errorRegister"]?></p>
+                    <?php }?>
+                    <input type="hidden" value="product" name="controller">
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Crear cuenta</button>
+                </form>
+                <p class="text-center mt-3">¿Ya tienes una cuenta? <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">Inicia session aquí</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="alert-container" class="pt-3 pb-3">
   <strong>Se ha añadido el producto con exito</strong>
-</div>
+</section>
 <script src="<?= url ?>js/searcher.js"></script>
 <script src="<?= url ?>js/effects.js"></script>
