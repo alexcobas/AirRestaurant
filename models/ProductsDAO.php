@@ -2,7 +2,7 @@
 include_once("models/Product.php");
 include_once("models/Images.php");
 include_once("models/CategoriesDAO.php");
-include_once("config/dataBase.php");
+include_once("config/DataBase.php");
 
 class ProductsDAO {
     

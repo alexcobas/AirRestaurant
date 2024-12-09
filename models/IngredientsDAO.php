@@ -1,6 +1,6 @@
 <?php
 include_once("models/Ingredient.php");
-include_once("config/dataBase.php");
+include_once("config/DataBase.php");
 class IngredientsDAO{
     public static function getAll(){
         $db = DataBase::connect();

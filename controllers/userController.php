@@ -25,11 +25,11 @@ class userController{
             header("Location: " . url . "$controller/index?errorRegister=Las contraseñas no coinciden.");
             exit();
         }
-        if (UsersDAO::emailInUse($_POST["email"])) {
+        if (UsersDAO::emailExists($_POST["email"])) {
             header("Location: " . url . "$controller/index?errorRegister=El email ya está vinculado a una cuenta.");
             exit();
         }
-        if (UsersDAO::usernameInUse($_POST["username"])) {
+        if (UsersDAO::usernameExists($_POST["username"])) {
             header("Location: " . url . "$controller/index?errorRegister=El username ya está en uso.");
             exit();
         }
@@ -43,6 +43,28 @@ class userController{
         $user->setRole("user");
         UsersDAO::store($user);
         header("Location: " . url . "$controller/");
+    }
+
+    public function login(){
+        $controller = $_POST["controller"] ?? "home";
+        if (empty($_POST["email"]) || empty($_POST["password"])) {
+            header("Location: " . url . "$controller/index?errorLogin=Todos los campos son obligatorios.");
+            exit();
+        }
+        $email = $_POST["email"];
+        $password = $_POST["password"];
+        if (!UsersDAO::emailExists($email)) {
+            header("Location: " . url . "$controller/index?errorLogin=No hay ninguna cuenta vinculada a este email.");
+            exit();
+        }
+        $user = UsersDAO::getUserByEmail($email);
+        if (!password_verify($password, $user->getPassword_hash())) {
+            header("Location: " . url . "$controller/index?errorLogin=La contraseña es incorrecta.");
+            exit();
+        }
+        session_start();
+        $_SESSION["user"] = $user;
+        header("Location: " . url . "$controller/dashboard");
     }
     
 }
