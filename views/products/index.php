@@ -228,7 +228,7 @@ if (isset($_GET['filterName'])) {
                 <p class="m-0">&copy; 2024 Air Restaurant, Inc.</p>
             </div>
             <div class="col-lg-2 col-md-3 col-sm-4 col-12 d-flex justify-content-lg-end">
-                <i class="bi bi-globe-americas pe-1"></i>
+                <i class="bi bi-globe pe-1"></i>
                 <strong>Español (ES)</strong>
             </div>
             <div class="col-lg-1 col-md-2 col-sm-2 col-12 d-flex justify-content-lg-end">

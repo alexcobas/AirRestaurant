@@ -32,7 +32,11 @@
                         <div class="dropdown">
                             <div class="d-flex align-items-center" id="customDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
                                 <span class="material-symbols-outlined icon-24">menu</span>
-                                <i class="bi bi-person-circle icon-24"></i>
+                                <?php if(empty($_SESSION["user"]) || empty($_SESSION["user"]->getImg_profile())){?>
+                                    <i class="bi bi-person-circle icon-24"></i>
+                                <?php } else{?>
+                                    <img src="<?=url?>/img/<?=$_SESSION["user"]->getImg_profile()?>" alt="profile image" class="img-fluid rounded-circle profile-img-24">
+                                <?php }?>
                             </div>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="customDropdown" style="right: 0; left: auto; transform-origin: right top;">
                             <?php if(empty($_SESSION["user"])){?>
@@ -57,6 +61,7 @@
                 </div>
             </div>
         </nav>
+        <hr class="line-border">
         <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
             <div class="offcanvas-header">
                 <h5 id="cartOffcanvasLabel">Carrito de Compras</h5>
@@ -175,7 +180,7 @@
             </div>
         </div>
     </section>
-
+    
     <section class="banner text-white text-center d-flex align-items-center justify-content-center position-relative">
         <div class="banner-dark-overlay"></div>
         <div class="container position-relative">
@@ -248,7 +253,7 @@
                 <p class="m-0">&copy; 2024 Air Restaurant, Inc.</p>
             </div>
             <div class="col-lg-2 col-md-3 col-sm-4 col-12 d-flex justify-content-lg-end">
-                <i class="bi bi-globe-americas pe-1"></i>
+                <i class="bi bi-globe pe-1"></i>
                 <strong>Español (ES)</strong>
             </div>
             <div class="col-lg-1 col-md-2 col-sm-2 col-12 d-flex justify-content-lg-end">

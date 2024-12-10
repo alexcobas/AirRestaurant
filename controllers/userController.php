@@ -8,6 +8,11 @@ class userController{
         include_once("views/main.php");
     }
 
+    public function show(){
+        $view = "views/users/show.php";
+        include_once("views/main.php");
+    }
+
     public function store(){
         if(isset($_POST["controller"])){
             $controller = $_POST["controller"];

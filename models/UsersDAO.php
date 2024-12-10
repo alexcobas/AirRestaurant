@@ -22,6 +22,7 @@ class UsersDAO{
         $stmt->close();
         $connection->close();
     }
+    
     public static function emailExists($email){
         $connection = DataBase::connect();
         $stmt = $connection->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
