@@ -122,13 +122,12 @@ class User{
      *
      * @return  self
      */ 
-    public function setPassword_hash($pasword_hash)
+    public function setPassword_hash($password_hash)
     {
-        $this->password_hash = $pasword_hash;
+        $this->password_hash = $password_hash;
 
         return $this;
     }
-
     /**
      * Get the value of role
      */ 

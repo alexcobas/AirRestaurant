@@ -167,8 +167,8 @@
 <section class="container mt-5">
   <h2 class="mb-2">Cuenta</h2>
   <p class="mb-4">
-    <strong>Alex Cobas Zarate</strong>
-    <span>, alesazorro@gmail.com ·</span> 
+    <strong><?=$_SESSION["user"]->getName() . " " . $_SESSION["user"]->getSurnames()?></strong>
+    <span>, <?=$_SESSION["user"]->getEmail()?> ·</span> 
     <a href="<?=url?>user/show?id=<?=$_SESSION["user"]->getId()?>" class="text-decoration-underline text-black">Ir al perfil</a>
   </p>
   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">

@@ -13,7 +13,7 @@ class UsersDAO{
         $name = $user->getName();
         $surnames = $user->getSurnames();
         $email = $user->getEmail();
-        $password_hash = $user->getPasword_hash();
+        $password_hash = $user->getPassword_hash();
         $role = $user->getRole();
         $stmt->bind_param("ssssss", $username, $name, $surnames, $email, $password_hash, $role);
         if (!$stmt->execute()) {
