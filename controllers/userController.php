@@ -4,12 +4,25 @@ include_once("models/UsersDAO.php");
 class userController{
 
     public function index(){
+        require($_SERVER['DOCUMENT_ROOT'] . "/AirRestaurant/config/protection.php");
         $view = "views/users/index.php";
         include_once("views/main.php");
     }
 
     public function show(){
+        require($_SERVER['DOCUMENT_ROOT'] . "/AirRestaurant/config/protection.php");
         $view = "views/users/show.php";
+        include_once("views/main.php");
+    }
+
+    public function destroy(){
+        UsersDAO::destroy($_SESSION['user']->getId());
+        header("Location: " . url . "/home/");
+    }
+
+    public function personalInfo(){
+        require($_SERVER['DOCUMENT_ROOT'] . "/AirRestaurant/config/protection.php");
+        $view = "views/users/personalInfo.php";
         include_once("views/main.php");
     }
 
