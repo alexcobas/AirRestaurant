@@ -170,27 +170,27 @@
 <section class="container mt-5">
     <div class="row">
         <!-- Columna izquierda: Información personal -->
-        <div class="col-lg-8">
+        <div class="col-lg-6">
             <!-- Título -->
             <div class="mb-4">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="<?= url ?>user/"><strong class="text-black text-decoration-underline">Cuenta</strong></a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><strong class="text-black">Datos personales</strong></li>
+                        <li class="breadcrumb-item"><a href="<?= url ?>user/" class="text-decoration-none"><strong class="text-gray hover-underline">Cuenta</strong></a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><strong class="text-gray">Datos personales</strong></li>
                     </ol>
                 </nav>
                 <div class="mt-3">
-                    <h2>Información personal</h2>
+                    <h2 class="fw-bold text-gray">Información personal</h2>
                 </div>
             </div>
             <!-- Lista de información personal -->
-            <div class="card">
+            <div class="">
                 <ul class="list-group list-group-flush">
                     <!-- Nombre legal -->
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
                             <strong>Nombre legal</strong><br>
-                            <p></p>
+                            <p class="mb-0 text-muted"><?=$_SESSION["user"]->getName()?> <?=$_SESSION["user"]->getSurnames()?></p>
                         </div>
                         <a href="#" class="text-decoration-none">Editar</a>
                     </li>
@@ -199,7 +199,7 @@
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
                             <strong>Nombre de pila</strong><br>
-                            No proporcionado
+                            <p class="text-muted">No proporcionado</p>
                         </div>
                         <a href="#" class="text-decoration-none">Añadir</a>
                     </li>
@@ -208,7 +208,7 @@
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
                             <strong>Dirección de correo electrónico</strong><br>
-                            a***o@gmail.com
+                            <p class="text-muted">a***o@gmail.com</p>
                         </div>
                         <a href="#" class="text-decoration-none">Editar</a>
                     </li>
@@ -217,7 +217,7 @@
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
                             <strong>Número de teléfono</strong><br>
-                            +34 *** ** 38 07
+                            <p class="text-muted">+34 *** ** 38 07</p>
                         </div>
                         <a href="#" class="text-decoration-none">Editar</a>
                     </li>
@@ -226,7 +226,7 @@
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
                             <strong>Documento de identificación oficial</strong><br>
-                            Proporcionado
+                            <p class="text-muted">Proporcionado</p>
                         </div>
                         <a href="#" class="text-decoration-none text-danger">Eliminar</a>
                     </li>
@@ -235,7 +235,7 @@
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
                             <strong>Dirección</strong><br>
-                            No proporcionado
+                            <p class="text-muted">No proporcionado</p>
                         </div>
                         <a href="#" class="text-decoration-none">Editar</a>
                     </li>
@@ -244,18 +244,7 @@
         </div>
 
         <!-- Columna derecha: Información adicional -->
-        <div class="col-lg-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">¿Por qué no se muestra mi información aquí?</h5>
-                    <p class="card-text">Ocultamos algunos detalles de tu cuenta para proteger tu identidad.</p>
-                </div>
-                <hr>
-                <div class="card-body">
-                    <h5 class="card-title">¿Qué datos se pueden editar?</h5>
-                    <p class="card-text">Puedes editar tus datos personales y de contacto. Si usaste esta información para verificar tu identidad, tendrás que volver a completar el proceso la próxima vez que quieras reservar un alojamiento o recibir huéspedes.</p>
-                </div>
-            </div>
+        <div class="col-lg-6">
         </div>
     </div>
 </section>

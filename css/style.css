@@ -398,3 +398,15 @@ button[type="submit"]:hover {
   height: 24px;
   object-fit: cover;
 }
+
+.text-gray{
+  color: #484848 !important;
+}
+
+.hover-underline{
+  text-decoration: none;
+}
+
+.hover-underline:hover{
+  text-decoration: underline;
+}
