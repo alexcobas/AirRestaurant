@@ -1,4 +1,3 @@
-<?php require($_SERVER['DOCUMENT_ROOT'] . "/AirRestaurant/config/protection.php")?>
 <header>
     <section class="fixed-top bg-white">
         <nav class="navbar navbar-expand-lg container mt-0">
