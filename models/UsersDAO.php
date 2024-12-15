@@ -74,4 +74,17 @@ class UsersDAO{
         $connection->close();
         return $user;
     }
+    public static function destroy($id){
+        $connection = DataBase::connect();
+        $stmt = $connection->prepare("DELETE FROM users WHERE id = ?");
+        if (!$stmt) {
+            die("Error en la preparación de la consulta al borrar el usuario: " . mysqli_error($connection));
+        }
+        $stmt->bind_param("i", $id);
+        if (!$stmt->execute()) {
+            die("Error al ejecutar la consulta al borrar el usuario: " . mysqli_error($connection));
+        }
+        $stmt->close();
+        $connection->close();
+    }
 }
