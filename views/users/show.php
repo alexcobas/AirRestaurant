@@ -164,6 +164,42 @@
         </div>
     </section>
 </header>
+<section class="container my-5">
+    <div class="row">
+        <!-- Información del usuario -->
+        <div class="col-md-4 text-center">
+            <?php if(!empty($_SESSION["user"]->getImg_profile())){?>
+                <img src="<?=url?>img/<?=$_SESSION["user"]->getImg_profile()?>" alt="Foto de <?=$_SESSION["user"]->getName()?>" class="rounded-circle mb-3" width="150" height="150">
+            <?php } else{?>
+                <div style="width: 150px; height: 150px; background: #000000; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 48px; font-family: Arial, sans-serif;" class="rounded-circle mb-3"><?= mb_strtoupper(mb_substr($_SESSION["user"]->getName(), 0, 1), 'UTF-8') ?></div>
+            <?php }?>
+            
+            <h3><?=$_SESSION["user"]->getName()?></h3>
+            <p class="text-muted">Viajero</p>
+            <p><strong>1</strong> evaluación | <strong>1</strong> año en Airbnb</p>
+        </div>
+        <!-- Información confirmada -->
+        <div class="col-md-4">
+            <h5>Información confirmada de <?=$_SESSION["user"]->getName()?></h5>
+            <ul class="list-unstyled">
+                <li>✔ Identidad</li>
+                <li>✔ Dirección de correo electrónico</li>
+                <li>✔ Número de teléfono</li>
+            </ul>
+            <a href="#" class="text-decoration-none">Más información sobre la verificación de la identidad</a>
+        </div>
+        <!-- Opiniones -->
+        <div class="col-md-4">
+            <h5>Opiniones de los anfitriones sobre Alex</h5>
+            <div class="border rounded p-3">
+                <p>“Encantados de recibirlos, han sido unos huéspedes excelentes.”</p>
+                <small class="text-muted">- Javier, septiembre de 2024</small>
+            </div>
+            <a href="#" class="text-decoration-none d-block mt-3">Mostrar la evaluación</a>
+            <a href="#" class="text-decoration-none">Evaluaciones que has escrito</a>
+        </div>
+    </div>
+</section>
 
 <hr class="w-100 mt-5 mb-0">
 <footer class="bg-light py-4">
