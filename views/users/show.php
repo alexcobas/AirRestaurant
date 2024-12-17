@@ -174,7 +174,7 @@
             <div class="row shadow-lg rounded-4 p-4 mx-0">
                 <div class="col-md-6 text-center d-flex flex-column align-items-center">
                     <?php if (!empty($_SESSION["user"]->getImg_profile())) { ?>
-                        <img src="<?= url ?>img/<?= $_SESSION["user"]->getImg_profile() ?>" alt="Foto de <?= $_SESSION["user"]->getName() ?>" class="rounded-circle mb-3" width="100" height="100">
+                        <img src="<?= url ?>img/<?= $_SESSION["user"]->getImg_profile() ?>" alt="Foto de <?= $_SESSION["user"]->getName() ?>" class="object-fit-cover rounded-circle mb-3" width="100" height="100">
                     <?php } else { ?>
                         <div style="width: 100px; height: 100px; background: #000000; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 48px; font-family: Arial, sans-serif;" class="rounded-circle mb-3"><?= mb_strtoupper(mb_substr($_SESSION["user"]->getName(), 0, 1), 'UTF-8') ?></div>
                     <?php } ?>
@@ -183,12 +183,8 @@
                 </div>
                 <div class="col-md-6 d-flex flex-column justify-content-center">
                     <div>
-                        <p class="m-0 h4"><strong>1</strong></p>
-                        <p class="m-0 small"> evaluación</p>
-                    </div>
-                    <div class="border-top border-top-1 pt-3">
-                        <p class="m-0 h4"><strong>1</strong></p>
-                        <p class="m-0 small"> año en Airbnb</p>
+                        <p class="m-0 h4"><strong><?= $_SESSION["user"]->getAccountAge() ?></strong></p>
+                        <p class="m-0 small"> <?= $_SESSION["user"]->getAccountAgeUnitLabel() ?> en AirRestaurant</p>
                     </div>
                 </div>
             </div>

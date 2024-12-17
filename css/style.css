@@ -410,3 +410,34 @@ button[type="submit"]:hover {
 .hover-underline:hover{
   text-decoration: underline;
 }
+.object-fit-cover{
+  object-fit: cover;
+  object-position: center;
+}
+/* Oscurecer otros campos */
+.inactive {
+  opacity: 0.3;
+  pointer-events: none; /* Bloquea clics y eventos */
+  filter: blur(1px); /* Opcional: agregar un pequeño desenfoque */
+}
+
+/* Botones y enlaces en modo edición */
+.save-btn {
+  background-color: #222222;
+  color: #ffffff;
+  border-radius: 5px;
+}
+
+.save-btn:hover {
+  background-color: #333333;
+}
+
+.cancel-btn {
+  color: #6c757d;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  text-decoration: underline;
+  color: #000;
+}

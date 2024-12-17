@@ -8,6 +8,13 @@ class User{
     private $password_hash;
     private $role;
     private $img_profile;
+    private $created_at;
+    private $accountAge;
+    private $accountAgeUnitLabel;
+
+    public function __construct() {
+        $this->calcularTiempoCuenta();
+    }
 
     /**
      * Get the value of id
@@ -166,5 +173,75 @@ class User{
         $this->img_profile = $img_profile;
 
         return $this;
+    }
+    /**
+     * Get the value of created_at
+     */
+    public function getCreated_at()
+    {
+        return $this->created_at;
+    }
+
+    /**
+     * Set the value of created_at
+     *
+     * @return  self
+     */
+    public function setCreated_at($created_at)
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+    /**
+     * Get the value of accountAge
+     */
+    public function getAccountAge()
+    {
+        return $this->accountAge;
+    }
+
+    /**
+     * Set the value of accountAge
+     *
+     * @return  self
+     */
+    public function setAccountAge($accountAge)
+    {
+        $this->accountAge = $accountAge;
+
+        return $this;
+    }
+    /**
+     * Get the value of accountAgeUnitLabel
+     */
+    public function getAccountAgeUnitLabel()
+    {
+        return $this->accountAgeUnitLabel;
+    }
+
+    /**
+     * Set the value of accountAgeUnitLabel
+     *
+     * @return  self
+     */
+    public function setAccountAgeUnitLabel($accountAgeUnitLabel)
+    {
+        $this->accountAgeUnitLabel = $accountAgeUnitLabel;
+
+        return $this;
+    }
+
+    public function calcularTiempoCuenta() {
+        $fechaCreacion = new DateTime($this->created_at);
+        $fechaActual = new DateTime();
+        $intervalo = $fechaCreacion->diff($fechaActual);
+        if ($intervalo->y > 0) {
+            $this->accountAge = $intervalo->y;
+            $this->accountAgeUnitLabel = $intervalo->y > 1 ? 'años' : 'año';
+        } else {
+            $this->accountAge = $intervalo->m == 0 ? 1 : $intervalo->m;
+            $this->accountAgeUnitLabel = $intervalo->m > 1 ? 'meses' : 'mes';
+        } 
     }
 }
