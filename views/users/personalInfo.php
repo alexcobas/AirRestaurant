@@ -185,108 +185,108 @@
             </div>
             <!-- Lista de información personal -->
             <div class="container mt-5">
-        <!-- Campo 1 -->
-        <div class="row field-container mb-4">
-            <div class="col-12">
-                <label class="form-label">Nombre legal</label>
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="field-value" data-original="test test test">test test test</span>
-                    <a class="edit-link">Editar</a>
+                <!-- Campo 1 -->
+                <div class="row field-container mb-4">
+                    <div class="col-12">
+                        <label class="form-label">Nombre legal</label>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="field-value" data-original="test test test">test test test</span>
+                            <a class="edit-link">Editar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campo 2 -->
+                <div class="row field-container mb-4">
+                    <div class="col-12">
+                        <label class="form-label">Nombre de pila</label>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="field-value" data-original="No proporcionado">No proporcionado</span>
+                            <a class="edit-link">Editar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campo 3 -->
+                <div class="row field-container mb-4">
+                    <div class="col-12">
+                        <label class="form-label">Dirección de correo electrónico</label>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="field-value" data-original="a***@gmail.com">a***@gmail.com</span>
+                            <a class="edit-link">Editar</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Campo 2 -->
-        <div class="row field-container mb-4">
-            <div class="col-12">
-                <label class="form-label">Nombre de pila</label>
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="field-value" data-original="No proporcionado">No proporcionado</span>
-                    <a class="edit-link">Editar</a>
-                </div>
-            </div>
-        </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const editLinks = document.querySelectorAll('.edit-link');
+                    const fieldContainers = document.querySelectorAll('.field-container');
 
-        <!-- Campo 3 -->
-        <div class="row field-container mb-4">
-            <div class="col-12">
-                <label class="form-label">Dirección de correo electrónico</label>
-                <div class="d-flex justify-content-between align-items-center">
-                    <span class="field-value" data-original="a***@gmail.com">a***@gmail.com</span>
-                    <a class="edit-link">Editar</a>
-                </div>
-            </div>
-        </div>
-    </div>
+                    editLinks.forEach((editLink) => {
+                        editLink.addEventListener("click", function() {
+                            const fieldContainer = editLink.closest('.field-container');
+                            const fieldValue = fieldContainer.querySelector('.field-value');
 
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const editLinks = document.querySelectorAll('.edit-link');
-        const fieldContainers = document.querySelectorAll('.field-container');
+                            // Si ya estamos editando, salir y resetear
+                            if (editLink.textContent === "Cancelar") {
+                                resetField(fieldContainer, editLink);
+                                return;
+                            }
 
-        editLinks.forEach((editLink) => {
-            editLink.addEventListener("click", function () {
-                const fieldContainer = editLink.closest('.field-container');
-                const fieldValue = fieldContainer.querySelector('.field-value');
+                            // Bloquear otros campos
+                            fieldContainers.forEach(container => {
+                                if (container !== fieldContainer) container.classList.add('disabled');
+                            });
 
-                // Si ya estamos editando, salir y resetear
-                if (editLink.textContent === "Cancelar") {
-                    resetField(fieldContainer, editLink);
-                    return;
-                }
+                            // Almacenar valor original
+                            const originalValue = fieldValue.dataset.original;
 
-                // Bloquear otros campos
-                fieldContainers.forEach(container => {
-                    if (container !== fieldContainer) container.classList.add('disabled');
+                            // Crear elementos dinámicos
+                            const inputField = document.createElement("input");
+                            inputField.type = "text";
+                            inputField.name = fieldValue.dataset.name || "field";
+                            inputField.className = "form-control";
+                            inputField.value = fieldValue.textContent;
+
+                            // Crear un formulario para enviar datos al backend
+                            const form = document.createElement("form");
+                            form.method = "post";
+                            form.action = "your-controller-endpoint.php";
+                            form.appendChild(inputField);
+
+                            // Crear un botón de enviar
+                            const saveButton = document.createElement("button");
+                            saveButton.type = "submit";
+                            saveButton.className = "btn btn-dark btn-sm mt-2";
+                            saveButton.textContent = "Guardar";
+
+                            // Reemplazar contenido
+                            fieldValue.textContent = '';
+                            fieldValue.appendChild(form);
+                            form.appendChild(saveButton);
+
+                            // Cambiar texto del enlace a "Cancelar"
+                            editLink.textContent = "Cancelar";
+
+                            // Función para resetear el estado
+                            function resetField(container, editLink) {
+                                const value = container.querySelector('.field-value');
+                                value.textContent = value.dataset.original;
+                                editLink.textContent = "Editar";
+                                fieldContainers.forEach(container => container.classList.remove('disabled'));
+                            }
+                        });
+                    });
                 });
-
-                // Almacenar valor original
-                const originalValue = fieldValue.dataset.original;
-
-                // Crear elementos dinámicos
-                const inputField = document.createElement("input");
-                inputField.type = "text";
-                inputField.name = fieldValue.dataset.name || "field";
-                inputField.className = "form-control";
-                inputField.value = fieldValue.textContent;
-
-                // Crear un formulario para enviar datos al backend
-                const form = document.createElement("form");
-                form.method = "post";
-                form.action = "your-controller-endpoint.php";
-                form.appendChild(inputField);
-
-                // Crear un botón de enviar
-                const saveButton = document.createElement("button");
-                saveButton.type = "submit";
-                saveButton.className = "btn btn-dark btn-sm mt-2";
-                saveButton.textContent = "Guardar";
-
-                // Reemplazar contenido
-                fieldValue.textContent = '';
-                fieldValue.appendChild(form);
-                form.appendChild(saveButton);
-
-                // Cambiar texto del enlace a "Cancelar"
-                editLink.textContent = "Cancelar";
-
-                // Función para resetear el estado
-                function resetField(container, editLink) {
-                    const value = container.querySelector('.field-value');
-                    value.textContent = value.dataset.original;
-                    editLink.textContent = "Editar";
-                    fieldContainers.forEach(container => container.classList.remove('disabled'));
-                }
-            });
-        });
-    });
-</script>
+            </script>
 
 
-        <!-- Columna derecha: Información adicional -->
-        <div class="col-lg-6">
+            <!-- Columna derecha: Información adicional -->
+            <div class="col-lg-6">
+            </div>
         </div>
-    </div>
 </section>
 <hr class="w-100 mt-5 mb-0">
 <footer class="bg-light py-4">

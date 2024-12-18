@@ -26,6 +26,12 @@ class userController{
         include_once("views/main.php");
     }
 
+    public function paymentMethods(){
+        require($_SERVER['DOCUMENT_ROOT'] . "/AirRestaurant/config/protection.php");
+        $view = "views/users/paymentMethods.php";
+        include_once("views/main.php");
+    }
+
     public function store(){
         if(isset($_POST["controller"])){
             $controller = $_POST["controller"];

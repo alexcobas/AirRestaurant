@@ -2,8 +2,8 @@
     <section class="fixed-top bg-white">
         <nav class="navbar navbar-expand-lg container mt-0">
             <div class="container-fluid">
-                <a class="navbar-brand" href="<?=url?>home/">
-                    <img src="<?=url?>img/logo.webp" class="logoSuperior" alt="Logo">
+                <a class="navbar-brand" href="<?= url ?>home/">
+                    <img src="<?= url ?>img/logo.webp" class="logoSuperior" alt="Logo">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -21,22 +21,26 @@
                                 <i class="bi bi-person-circle icon-24"></i>
                             </div>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="customDropdown" style="right: 0; left: auto; transform-origin: right top;">
-                            <?php if(empty($_SESSION["user"])){?>
-                                <li><a class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#loginModal">Iniciar sesión</a></li>
-                                <li><a class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">Regístrate</a></li>
-                            <?php } else{?>
-                                <li><a class="dropdown-item" href="<?=url?>user/">Cuenta</a></li>
-                                <li><a class="dropdown-item" href="<?=url?>user/order">Ver mis pedidos</a></li>
-                            <?php }?>
-                                <li><hr class="dropdown-divider"></li>
+                                <?php if (empty($_SESSION["user"])) { ?>
+                                    <li><a class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#loginModal">Iniciar sesión</a></li>
+                                    <li><a class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">Regístrate</a></li>
+                                <?php } else { ?>
+                                    <li><a class="dropdown-item" href="<?= url ?>user/">Cuenta</a></li>
+                                    <li><a class="dropdown-item" href="<?= url ?>user/order">Ver mis pedidos</a></li>
+                                <?php } ?>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
                                 <li><a class="dropdown-item" href="#">Tarjetas regalo</a></li>
                                 <li><a class="dropdown-item" href="#">Pon tu casa en Airbnb</a></li>
                                 <li><a class="dropdown-item" href="#">Ofrece una experiencia</a></li>
                                 <li><a class="dropdown-item" href="#">Centro de ayuda</a></li>
-                            <?php if(!empty($_SESSION["user"])){?>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="<?=url?>user/logout">Cerrar sesion</a></li>
-                            <?php }?>
+                                <?php if (!empty($_SESSION["user"])) { ?>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="<?= url ?>user/logout">Cerrar sesion</a></li>
+                                <?php } ?>
                             </ul>
                         </div>
                     </div>
@@ -51,7 +55,7 @@
             </div>
             <div class="offcanvas-body">
                 <?php if (!empty($products)) { ?>
-                <?php $totalPrice=0?>
+                    <?php $totalPrice = 0 ?>
                     <?php foreach ($products as $product) { ?>
                         <div class="product-item border-bottom pb-2">
                             <div class="d-flex justify-content-between align-items-center">
@@ -67,7 +71,7 @@
                             </div>
                         </div>
                     <?php
-                    $totalPrice += $product->getBase_Price();
+                        $totalPrice += $product->getBase_Price();
                     } ?>
                 <?php } else { ?>
                     <p>No hay productos en el carrito.</p>
@@ -76,7 +80,7 @@
             <div class="offcanvas-footer border-top p-3">
                 <div class="d-flex justify-content-between">
                     <p class="fw-bold mb-0">Total:</p>
-                    <p class="fw-bold mb-0"><?=number_format($totalPrice, 2)?> €</p>
+                    <p class="fw-bold mb-0"><?= number_format($totalPrice, 2) ?> €</p>
                 </div>
                 <button type="button" class="btn btn-primary w-100 mt-2">Ir al carrito</button>
             </div>
@@ -108,9 +112,9 @@
                             <a href="#" class="text-decoration-none">¿Olvidaste tu contraseña?</a>
                         </div>
                         <input type="hidden" value="product" name="controller">
-                        <?php if(isset($_GET["errorLogin"])){?>
-                            <p class="errorMessage"><?=$_GET["errorLogin"]?></p>
-                        <?php }?>
+                        <?php if (isset($_GET["errorLogin"])) { ?>
+                            <p class="errorMessage"><?= $_GET["errorLogin"] ?></p>
+                        <?php } ?>
                         <button type="submit" class="btn btn-primary w-100 mt-3">Iniciar sesión</button>
                     </form>
                     <p class="text-center mt-3">¿No tienes cuenta? <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-dismiss="modal">Regístrate aquí</a></p>
@@ -152,9 +156,9 @@
                             <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
                         </div>
                         <input type="hidden" value="product" name="controller">
-                        <?php if(isset($_GET["errorRegister"])){?>
-                            <p class="errorMessage"><?=$_GET["errorRegister"]?></p>
-                        <?php }?>
+                        <?php if (isset($_GET["errorRegister"])) { ?>
+                            <p class="errorMessage"><?= $_GET["errorRegister"] ?></p>
+                        <?php } ?>
                         <button type="submit" class="btn btn-primary w-100 mt-3">Crear cuenta</button>
                     </form>
                     <p class="text-center mt-3">¿Ya tienes una cuenta? <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">Inicia session aquí</a></p>
@@ -164,71 +168,111 @@
     </section>
 </header>
 <section class="container mt-5">
-  <h2 class="mb-2">Cuenta</h2>
-  <p class="mb-4">
-    <strong><?=$_SESSION["user"]->getName() . " " . $_SESSION["user"]->getSurnames()?></strong>
-    <span>, <?=$_SESSION["user"]->getEmail()?> ·</span> 
-    <a href="<?=url?>user/show?id=<?=$_SESSION["user"]->getId()?>" class="text-decoration-underline text-black">Ir al perfil</a>
-  </p>
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    <div class="col">
-      <a href="<?=url?>user/personalInfo" class="custom-card text-black">
-        <div class="icon-wrapper mb-2">
-          <i class="bi bi-card-text fs-3"></i>
+    <div class="row">
+        <!-- Columna izquierda: Información personal -->
+        <div class="col-lg-6">
+            <!-- Título -->
+            <div class="mb-4">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="<?= url ?>user/" class="text-decoration-none"><strong class="text-gray hover-underline">Cuenta</strong></a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><strong class="text-gray">Pagos y cobros</strong></li>
+                    </ol>
+                </nav>
+                <div class="mt-3">
+                    <h2 class="fw-bold text-gray">Pagos y cobros</h2>
+                </div>
+            </div>
+            <!-- Lista de información personal -->
+            <div class="card p-4 shadow-sm">
+                <!-- Título -->
+                <h4 class="fw-bold">Métodos de pago</h4>
+                <p class="text-secondary">Añade y gestiona tus métodos de pago a través de nuestro sistema de pago seguro.</p>
+
+                <!-- Método de Pago -->
+                <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-3">
+                    <div class="d-flex align-items-center">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Visa.svg/1200px-Visa.svg.png" alt="VISA" style="width: 40px; height: auto;" class="me-3">
+                        <div>
+                            <p class="mb-0 fw-bold">VISA •••• 1197</p>
+                            <p class="mb-0 text-secondary">Caducidad: 07/2029</p>
+                        </div>
+                    </div>
+                    <!-- Icono de menú -->
+                    <div class="dropdown">
+                        <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-three-dots"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Editar</a></li>
+                            <li><a class="dropdown-item" href="#">Eliminar</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Botón Añadir método -->
+                <button class="btn btn-dark w-100" data-bs-toggle="modal" data-bs-target="#addCardModal">Añadir método de pago</button>
+            </div>
         </div>
-        <h5 class="card-title">Información personal</h5>
-        <p class="text-muted">Actualiza tus datos personales e indícanos cómo podemos ponernos en contacto contigo.</p>
-      </a>
-    </div>
-    <div class="col">
-      <a href="#" class="custom-card text-black">
-        <div class="icon-wrapper mb-2">
-          <i class="bi bi-shield-lock fs-3"></i>
+        <div class="col-lg-6">
         </div>
-        <h5 class="card-title">Inicio de sesión y seguridad</h5>
-        <p class="text-muted">Protege tu cuenta actualizando tu contraseña y opciones de seguridad.</p>
-      </a>
-    </div>
-    <div class="col">
-      <a href="<?=url?>user/paymentMethods" class="custom-card text-black">
-        <div class="icon-wrapper mb-2">
-          <i class="bi bi-credit-card fs-3"></i>
+        <div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="addCardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold" id="addCardModalLabel">Añade los datos de la tarjeta</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
-        <h5 class="card-title">Pagos y cobros</h5>
-        <p class="text-muted">Gestiona tus métodos de pago, cobros y cupones disponibles.</p>
-      </a>
-    </div>
-    <div class="col">
-      <a href="#" class="custom-card text-black">
-        <div class="icon-wrapper mb-2">
-          <i class="bi bi-bell fs-3"></i>
+        <div class="modal-body">
+          <form>
+            <!-- Logos de Tarjetas -->
+            <div class="mb-3 d-flex">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="VISA" style="width: 40px;" class="me-2">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg" alt="MasterCard" style="width: 40px;" class="me-2">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo_%282018%29.svg" alt="AMEX" style="width: 40px;">
+            </div>
+            <!-- Número de tarjeta -->
+            <div class="mb-3">
+              <label class="form-label">Número de tarjeta</label>
+              <input type="text" class="form-control" placeholder="•••• •••• •••• ••••">
+            </div>
+            <!-- Caducidad y CVV -->
+            <div class="row mb-3">
+              <div class="col">
+                <label class="form-label">Caducidad</label>
+                <input type="text" class="form-control" placeholder="MM/AA">
+              </div>
+              <div class="col">
+                <label class="form-label">CVV</label>
+                <input type="text" class="form-control" placeholder="123">
+              </div>
+            </div>
+            <!-- Código postal -->
+            <div class="mb-3">
+              <label class="form-label">Código postal</label>
+              <input type="text" class="form-control" placeholder="00000">
+            </div>
+            <!-- País/Región -->
+            <div class="mb-3">
+              <label class="form-label">País/región</label>
+              <select class="form-select">
+                <option selected>España</option>
+                <option>México</option>
+                <option>Argentina</option>
+                <option>Colombia</option>
+              </select>
+            </div>
+          </form>
         </div>
-        <h5 class="card-title">Notificaciones</h5>
-        <p class="text-muted">Configura tus preferencias de notificación para emails y alertas.</p>
-      </a>
-    </div>
-    <div class="col">
-      <a href="#" class="custom-card text-black">
-        <div class="icon-wrapper mb-2">
-          <i class="bi bi-eye fs-3"></i>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-dark">Listo</button>
         </div>
-        <h5 class="card-title">Privacidad y datos</h5>
-        <p class="text-muted">Controla cómo compartes tu información personal con terceros.</p>
-      </a>
-    </div>
-    <div class="col">
-      <a href="#" class="custom-card text-black">
-        <div class="icon-wrapper mb-2">
-          <i class="bi bi-globe fs-3"></i>
-        </div>
-        <h5 class="card-title">Preferencias globales</h5>
-        <p class="text-muted">Selecciona tu idioma, zona horaria y moneda predeterminados.</p>
-      </a>
+      </div>
     </div>
   </div>
+    </div>
 </section>
-
-
 <hr class="w-100 mt-5 mb-0">
 <footer class="bg-light py-4">
     <div class="container">
