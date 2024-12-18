@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campos Editables</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Estilos generales */
+        .edit-link {
+            cursor: pointer;
+            color: #0d6efd;
+            text-decoration: none;
+        }
+        .edit-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Botón guardar negro */
+        .save-btn {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .save-btn:hover {
+            background-color: #333;
+        }
+
+        /* Bloquear el resto de los campos */
+        .field-container.disabled {
+            pointer-events: none;
+            opacity: 0.5;
+            filter: blur(2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <!-- Campo 1 -->
+        <div class="row field-container mb-4">
+            <div class="col-12">
+                <label class="form-label">Nombre legal</label>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="field-value" data-original="test test test">test test test</span>
+                    <a class="edit-link">Editar</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campo 2 -->
+        <div class="row field-container mb-4">
+            <div class="col-12">
+                <label class="form-label">Nombre de pila</label>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="field-value" data-original="No proporcionado">No proporcionado</span>
+                    <a class="edit-link">Editar</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campo 3 -->
+        <div class="row field-container mb-4">
+            <div class="col-12">
+                <label class="form-label">Dirección de correo electrónico</label>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="field-value" data-original="a***@gmail.com">a***@gmail.com</span>
+                    <a class="edit-link">Editar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const editLinks = document.querySelectorAll('.edit-link');
+            const fieldContainers = document.querySelectorAll('.field-container');
+
+            editLinks.forEach((editLink) => {
+                editLink.addEventListener("click", function () {
+                    const fieldContainer = editLink.closest('.field-container');
+                    const fieldValue = fieldContainer.querySelector('.field-value');
+
+                    // Si ya estamos editando, salir
+                    if (editLink.textContent === "Cancelar") {
+                        resetField(fieldContainer, editLink);
+                        return;
+                    }
+
+                    // Bloquear otros campos
+                    fieldContainers.forEach(container => {
+                        if (container !== fieldContainer) container.classList.add('disabled');
+                    });
+
+                    // Almacenar valor original
+                    const originalValue = fieldValue.dataset.original;
+
+                    // Crear elementos dinámicos
+                    const inputField = document.createElement("input");
+                    inputField.type = "text";
+                    inputField.className = "form-control";
+                    inputField.value = fieldValue.textContent;
+
+                    const saveButton = document.createElement("button");
+                    saveButton.className = "save-btn btn-sm";
+                    saveButton.textContent = "Guardar";
+
+                    // Reemplazar contenido
+                    fieldValue.textContent = '';
+                    fieldValue.appendChild(inputField);
+                    fieldValue.appendChild(saveButton);
+
+                    // Cambiar texto del enlace a "Cancelar"
+                    editLink.textContent = "Cancelar";
+
+                    // Evento Guardar
+                    saveButton.addEventListener("click", function () {
+                        const newValue = inputField.value.trim();
+                        if (newValue !== "") {
+                            fieldValue.dataset.original = newValue;
+                            fieldValue.textContent = newValue;
+                        } else {
+                            fieldValue.textContent = originalValue;
+                        }
+                        resetField(fieldContainer, editLink);
+                    });
+
+                    // Función para resetear el estado
+                    function resetField(container, editLink) {
+                        const value = container.querySelector('.field-value');
+                        value.textContent = value.dataset.original;
+                        editLink.textContent = "Editar";
+                        fieldContainers.forEach(container => container.classList.remove('disabled'));
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

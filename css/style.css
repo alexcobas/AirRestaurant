@@ -349,15 +349,15 @@
   font-size: 1.25rem;
   font-weight: bold;
 }
-
-button[type="submit"] {
+/* Estetica botones primarios*/
+.btn-primary {
   background: linear-gradient(to right, #F22D5D, #D70566);
   border: none;
   color: white;
   font-weight: bold;
 }
 
-button[type="submit"]:hover {
+.btn-primary:hover {
   background: linear-gradient(to right, #F22D5D, #D70566);
 }
 
@@ -440,4 +440,32 @@ button[type="submit"]:hover {
 .cancel-btn:hover {
   text-decoration: underline;
   color: #000;
+}
+.edit-link {
+  cursor: pointer;
+  color: #0d6efd;
+  text-decoration: none;
+}
+.edit-link:hover {
+  text-decoration: underline;
+}
+
+/* Botón guardar negro */
+.save-btn {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+.save-btn:hover {
+  background-color: #333;
+}
+
+/* Bloquear el resto de los campos */
+.field-container.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  filter: blur(2px);
 }

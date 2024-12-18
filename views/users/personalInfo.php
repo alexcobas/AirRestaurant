@@ -184,64 +184,104 @@
                 </div>
             </div>
             <!-- Lista de información personal -->
-            <div class="">
-                <ul class="list-group list-group-flush">
-                    <!-- Nombre legal -->
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>Nombre legal</strong><br>
-                            <p class="mb-0 text-muted"><?=$_SESSION["user"]->getName()?> <?=$_SESSION["user"]->getSurnames()?></p>
-                        </div>
-                        <a href="#" class="text-decoration-none">Editar</a>
-                    </li>
-
-                    <!-- Nombre de pila -->
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>Nombre de pila</strong><br>
-                            <p class="text-muted">No proporcionado</p>
-                        </div>
-                        <a href="#" class="text-decoration-none">Añadir</a>
-                    </li>
-
-                    <!-- Dirección de correo electrónico -->
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>Dirección de correo electrónico</strong><br>
-                            <p class="text-muted">a***o@gmail.com</p>
-                        </div>
-                        <a href="#" class="text-decoration-none">Editar</a>
-                    </li>
-
-                    <!-- Número de teléfono -->
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>Número de teléfono</strong><br>
-                            <p class="text-muted">+34 *** ** 38 07</p>
-                        </div>
-                        <a href="#" class="text-decoration-none">Editar</a>
-                    </li>
-
-                    <!-- Documento de identificación oficial -->
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>Documento de identificación oficial</strong><br>
-                            <p class="text-muted">Proporcionado</p>
-                        </div>
-                        <a href="#" class="text-decoration-none text-danger">Eliminar</a>
-                    </li>
-
-                    <!-- Dirección -->
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            <strong>Dirección</strong><br>
-                            <p class="text-muted">No proporcionado</p>
-                        </div>
-                        <a href="#" class="text-decoration-none">Editar</a>
-                    </li>
-                </ul>
+            <div class="container mt-5">
+        <!-- Campo 1 -->
+        <div class="row field-container mb-4">
+            <div class="col-12">
+                <label class="form-label">Nombre legal</label>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="field-value" data-original="test test test">test test test</span>
+                    <a class="edit-link">Editar</a>
+                </div>
             </div>
         </div>
+
+        <!-- Campo 2 -->
+        <div class="row field-container mb-4">
+            <div class="col-12">
+                <label class="form-label">Nombre de pila</label>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="field-value" data-original="No proporcionado">No proporcionado</span>
+                    <a class="edit-link">Editar</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Campo 3 -->
+        <div class="row field-container mb-4">
+            <div class="col-12">
+                <label class="form-label">Dirección de correo electrónico</label>
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="field-value" data-original="a***@gmail.com">a***@gmail.com</span>
+                    <a class="edit-link">Editar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const editLinks = document.querySelectorAll('.edit-link');
+        const fieldContainers = document.querySelectorAll('.field-container');
+
+        editLinks.forEach((editLink) => {
+            editLink.addEventListener("click", function () {
+                const fieldContainer = editLink.closest('.field-container');
+                const fieldValue = fieldContainer.querySelector('.field-value');
+
+                // Si ya estamos editando, salir y resetear
+                if (editLink.textContent === "Cancelar") {
+                    resetField(fieldContainer, editLink);
+                    return;
+                }
+
+                // Bloquear otros campos
+                fieldContainers.forEach(container => {
+                    if (container !== fieldContainer) container.classList.add('disabled');
+                });
+
+                // Almacenar valor original
+                const originalValue = fieldValue.dataset.original;
+
+                // Crear elementos dinámicos
+                const inputField = document.createElement("input");
+                inputField.type = "text";
+                inputField.name = fieldValue.dataset.name || "field";
+                inputField.className = "form-control";
+                inputField.value = fieldValue.textContent;
+
+                // Crear un formulario para enviar datos al backend
+                const form = document.createElement("form");
+                form.method = "post";
+                form.action = "your-controller-endpoint.php";
+                form.appendChild(inputField);
+
+                // Crear un botón de enviar
+                const saveButton = document.createElement("button");
+                saveButton.type = "submit";
+                saveButton.className = "btn btn-dark btn-sm mt-2";
+                saveButton.textContent = "Guardar";
+
+                // Reemplazar contenido
+                fieldValue.textContent = '';
+                fieldValue.appendChild(form);
+                form.appendChild(saveButton);
+
+                // Cambiar texto del enlace a "Cancelar"
+                editLink.textContent = "Cancelar";
+
+                // Función para resetear el estado
+                function resetField(container, editLink) {
+                    const value = container.querySelector('.field-value');
+                    value.textContent = value.dataset.original;
+                    editLink.textContent = "Editar";
+                    fieldContainers.forEach(container => container.classList.remove('disabled'));
+                }
+            });
+        });
+    });
+</script>
+
 
         <!-- Columna derecha: Información adicional -->
         <div class="col-lg-6">
