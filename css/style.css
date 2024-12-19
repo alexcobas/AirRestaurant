@@ -469,3 +469,108 @@
   opacity: 0.5;
   filter: blur(2px);
 }
+/* Estilo del modal */
+.modal-content {
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Contenedor principal del formulario */
+.input-container {
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding: 15px;
+  background-color: #fff;
+  margin-bottom: 20px;
+}
+
+/* Estilo de cada input individual */
+.input-field {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.input-field input, .input-field select {
+  width: 100%;
+  padding: 12px 10px;
+  font-size: 1rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  outline: none;
+  background-color: #f9f9f9;
+}
+
+.input-field label {
+  position: absolute;
+  top: 12px;
+  left: 10px;
+  font-size: 1rem;
+  color: #777;
+  transition: all 0.2s ease;
+  pointer-events: none;
+}
+
+/* Efecto de label flotante */
+.input-field input:focus + label,
+.input-field input:not(:placeholder-shown) + label,
+.input-field select:focus + label {
+  top: -10px;
+  left: 10px;
+  font-size: 0.8rem;
+  color: #333;
+  background-color: #fff;
+  padding: 0 5px;
+}
+
+/* Espaciado para inputs */
+.input-row {
+  display: flex;
+  gap: 15px;
+}
+
+.input-half {
+  flex: 1;
+}
+
+/* Botones */
+.modal-footer a {
+  color: #333;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.btn-dark {
+  border-radius: 8px;
+  font-weight: bold;
+  padding: 10px 20px;
+}
+
+.input-field select {
+appearance: none; /* Elimina la apariencia predeterminada del navegador */
+background-color: #f9f9f9;
+padding: 12px 10px;
+font-size: 1rem;
+border: 1px solid transparent;
+border-radius: 8px;
+outline: none;
+}
+
+.input-field select:focus + label,
+.input-field select:not(:empty) + label {
+top: -10px;
+left: 10px;
+font-size: 0.8rem;
+color: #333;
+background-color: #fff;
+padding: 0 5px;
+}
+
+/* Ajuste para que el label no se sobreponga */
+.input-field select:valid + label {
+top: -10px;
+left: 10px;
+font-size: 0.8rem;
+color: #333;
+background-color: #fff;
+padding: 0 5px;
+}

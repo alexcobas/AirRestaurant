@@ -217,60 +217,60 @@
         <div class="col-lg-6">
         </div>
         <div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="addCardModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold" id="addCardModalLabel">Añade los datos de la tarjeta</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="tarjetaModalLabel">Añade los datos de la tarjeta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Contenedor principal -->
+        <div class="input-container">
+          <!-- Número de tarjeta -->
+          <div class="input-field">
+            <input type="text" id="numeroTarjeta" placeholder=" " required>
+            <label for="numeroTarjeta">Número de tarjeta</label>
+          </div>
+
+          <!-- Caducidad y CVV -->
+          <div class="input-row">
+            <div class="input-field input-half">
+              <input type="text" id="caducidad" placeholder=" " required>
+              <label for="caducidad">Caducidad (MM/AA)</label>
+            </div>
+            <div class="input-field input-half">
+              <input type="text" id="cvv" placeholder=" " required>
+              <label for="cvv">CVV</label>
+            </div>
+          </div>
+
+          <!-- Código postal -->
+          <div class="input-field">
+            <input type="text" id="codigoPostal" placeholder=" " required>
+            <label for="codigoPostal">Código postal</label>
+          </div>
+
+          <!-- País/Región -->
+          <div class="input-field">
+            <select id="paisRegion" required>
+              <option value="España">España</option>
+              <option value="México">México</option>
+              <option value="Argentina">Argentina</option>
+              <option value="Colombia">Colombia</option>
+            </select>
+            <label for="paisRegion">País/Región</label>
+          </div>
         </div>
-        <div class="modal-body">
-          <form>
-            <!-- Logos de Tarjetas -->
-            <div class="mb-3 d-flex">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="VISA" style="width: 40px;" class="me-2">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg" alt="MasterCard" style="width: 40px;" class="me-2">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/American_Express_logo_%282018%29.svg" alt="AMEX" style="width: 40px;">
-            </div>
-            <!-- Número de tarjeta -->
-            <div class="mb-3">
-              <label class="form-label">Número de tarjeta</label>
-              <input type="text" class="form-control" placeholder="•••• •••• •••• ••••">
-            </div>
-            <!-- Caducidad y CVV -->
-            <div class="row mb-3">
-              <div class="col">
-                <label class="form-label">Caducidad</label>
-                <input type="text" class="form-control" placeholder="MM/AA">
-              </div>
-              <div class="col">
-                <label class="form-label">CVV</label>
-                <input type="text" class="form-control" placeholder="123">
-              </div>
-            </div>
-            <!-- Código postal -->
-            <div class="mb-3">
-              <label class="form-label">Código postal</label>
-              <input type="text" class="form-control" placeholder="00000">
-            </div>
-            <!-- País/Región -->
-            <div class="mb-3">
-              <label class="form-label">País/región</label>
-              <select class="form-select">
-                <option selected>España</option>
-                <option>México</option>
-                <option>Argentina</option>
-                <option>Colombia</option>
-              </select>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-link text-dark" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-dark">Listo</button>
-        </div>
+      </div>
+
+      <!-- Footer del modal -->
+      <div class="modal-footer d-flex justify-content-between">
+        <a href="#" data-bs-dismiss="modal">Cancelar</a>
+        <button type="button" class="btn btn-dark">Listo</button>
       </div>
     </div>
   </div>
+        </div>
     </div>
 </section>
 <hr class="w-100 mt-5 mb-0">
