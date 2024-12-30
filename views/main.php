@@ -14,7 +14,9 @@
 </head>
 
 <body>
+    <?php if(!empty($header)){include_once $header; }?>
     <?php include_once $view; ?>
+    <?php if(!empty($footer)){include_once $footer; }?>
     <script src="<?=url?>/js/dinamicMargin.js"></script>
     <?php if(isset($_GET["errorRegister"])){?>
         <script src="<?= url ?>js/openRegister.js"></script>

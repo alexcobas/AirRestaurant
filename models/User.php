@@ -8,6 +8,7 @@ class User{
     private $password_hash;
     private $role;
     private $img_profile;
+    private $cards;
     private $created_at;
     private $accountAge;
     private $accountAgeUnitLabel;
@@ -174,6 +175,25 @@ class User{
 
         return $this;
     }
+    public function setCards($cards){
+        $this->cards = $cards;
+
+        return $this;
+    }
+    public function getCards() {
+        return $this->cards;
+    }
+    public function addCard($card) {
+        $this->cards[] = $card;
+    }
+    public function deleteCard($cardId) {
+        foreach ($this->cards as $key => $card) {
+            if ($card->getId() == $cardId) {
+                unset($this->cards[$key]);
+                break;
+            }
+        }
+    }
     /**
      * Get the value of created_at
      */
@@ -243,5 +263,12 @@ class User{
             $this->accountAge = $intervalo->m == 0 ? 1 : $intervalo->m;
             $this->accountAgeUnitLabel = $intervalo->m > 1 ? 'meses' : 'mes';
         } 
+    }
+    public function getFormattedEmail()
+    {
+        $email = $this->getEmail(); 
+        $firstChar = substr($email, 0, 1);
+        $emailParts = explode('@', $email);
+        return $firstChar . "***@" . $emailParts[1]; 
     }
 }

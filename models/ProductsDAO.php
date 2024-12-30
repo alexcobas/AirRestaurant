@@ -34,6 +34,8 @@ class ProductsDAO {
         $stmtProduct->execute();
         $resultProduct = $stmtProduct->get_result();
         $product = $resultProduct->fetch_object('Product');
+        $product->setImages(ProductsDAO::findImagesProduct($product->getId()));
+        $product->setCategory(CategoriesDAO::find($product->getCategory_id()));
         $db->close();
         return $product;
     }

@@ -70,6 +70,7 @@ class UsersDAO{
         }
         $result = $stmt->get_result();
         $user = $result->fetch_object("User");
+        $user->setCards(CardsDAO::getUserCards($user->getId()));
         $stmt->close();
         $connection->close();
         return $user;
@@ -83,6 +84,19 @@ class UsersDAO{
         $stmt->bind_param("i", $id);
         if (!$stmt->execute()) {
             die("Error al ejecutar la consulta al borrar el usuario: " . mysqli_error($connection));
+        }
+        $stmt->close();
+        $connection->close();
+    }
+    public static function update($id, $field, $value){
+        $connection = DataBase::connect();
+        $stmt = $connection->prepare("UPDATE users SET $field = ? WHERE id = ?");
+        if (!$stmt) {
+            die("Error en la preparación de la consulta al actualizar el usuario: " . mysqli_error($connection));
+        }
+        $stmt->bind_param("si", $value, $id);
+        if (!$stmt->execute()) {
+            die("Error al ejecutar la consulta al actualizar el usuario: " . mysqli_error($connection));
         }
         $stmt->close();
         $connection->close();

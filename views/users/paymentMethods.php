@@ -1,177 +1,6 @@
-<header>
-    <section class="fixed-top bg-white">
-        <nav class="navbar navbar-expand-lg container mt-0">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="<?= url ?>home/">
-                    <img src="<?= url ?>img/logo.webp" class="logoSuperior" alt="Logo">
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <div class="navbar-nav mx-auto mb-2 mb-lg-0">
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <div class="d-flex p-1 align-items-center">
-                            <span class="material-symbols-outlined icon-24">shopping_cart</span>
-                        </div>
-                        <div class="dropdown">
-                            <div class="d-flex align-items-center" id="customDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
-                                <span class="material-symbols-outlined icon-24">menu</span>
-                                <i class="bi bi-person-circle icon-24"></i>
-                            </div>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="customDropdown" style="right: 0; left: auto; transform-origin: right top;">
-                                <?php if (empty($_SESSION["user"])) { ?>
-                                    <li><a class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#loginModal">Iniciar sesión</a></li>
-                                    <li><a class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">Regístrate</a></li>
-                                <?php } else { ?>
-                                    <li><a class="dropdown-item" href="<?= url ?>user/">Cuenta</a></li>
-                                    <li><a class="dropdown-item" href="<?= url ?>user/order">Ver mis pedidos</a></li>
-                                <?php } ?>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Tarjetas regalo</a></li>
-                                <li><a class="dropdown-item" href="#">Pon tu casa en Airbnb</a></li>
-                                <li><a class="dropdown-item" href="#">Ofrece una experiencia</a></li>
-                                <li><a class="dropdown-item" href="#">Centro de ayuda</a></li>
-                                <?php if (!empty($_SESSION["user"])) { ?>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item" href="<?= url ?>user/logout">Cerrar sesion</a></li>
-                                <?php } ?>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
-        <hr class="line-border">
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
-            <div class="offcanvas-header">
-                <h5 id="cartOffcanvasLabel">Carrito de Compras</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <?php if (!empty($products)) { ?>
-                    <?php $totalPrice = 0 ?>
-                    <?php foreach ($products as $product) { ?>
-                        <div class="product-item border-bottom pb-2">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <img src="<?= url ?>img/<?= $product->getImages()[0]->getPhoto_archive_name() ?>" alt="<?= $product->getName() ?>" class="img-thumbnail" style="width: 70px; height: 70px;">
-                                    <div class="ms-3">
-                                        <p class="mb-0 fw-bold"><?= $product->getName(); ?></p>
-                                        <p class="text-muted mb-0"><?= $product->getCategory()->getName(); ?></p>
-                                        <p class="text-muted mb-0"><?= $product->getBase_Price(); ?> €</p>
-                                    </div>
-                                </div>
-                                <button class="btn btn-danger btn-sm">Eliminar</button>
-                            </div>
-                        </div>
-                    <?php
-                        $totalPrice += $product->getBase_Price();
-                    } ?>
-                <?php } else { ?>
-                    <p>No hay productos en el carrito.</p>
-                <?php } ?>
-            </div>
-            <div class="offcanvas-footer border-top p-3">
-                <div class="d-flex justify-content-between">
-                    <p class="fw-bold mb-0">Total:</p>
-                    <p class="fw-bold mb-0"><?= number_format($totalPrice, 2) ?> €</p>
-                </div>
-                <button type="button" class="btn btn-primary w-100 mt-2">Ir al carrito</button>
-            </div>
-        </div>
-    </section>
-    <section class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header justify-content-center">
-                    <h5 class="modal-title" id="loginModalLabel">Inicia sesión o regístrate</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <h4 class="text-center my-4">¡Te damos la bienvenida a AirRestaurant!</h4>
-                    <form action="your-login-endpoint.php" method="post">
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Correo electrónico</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="loginPassword" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" id="loginPassword" name="password" required>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <div>
-                                <input type="checkbox" id="remember" name="remember">
-                                <label for="remember" class="form-check-label">Recordarme</label>
-                            </div>
-                            <a href="#" class="text-decoration-none">¿Olvidaste tu contraseña?</a>
-                        </div>
-                        <input type="hidden" value="product" name="controller">
-                        <?php if (isset($_GET["errorLogin"])) { ?>
-                            <p class="errorMessage"><?= $_GET["errorLogin"] ?></p>
-                        <?php } ?>
-                        <button type="submit" class="btn btn-primary w-100 mt-3">Iniciar sesión</button>
-                    </form>
-                    <p class="text-center mt-3">¿No tienes cuenta? <a href="#" data-bs-toggle="modal" data-bs-target="#registerModal" data-bs-dismiss="modal">Regístrate aquí</a></p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="registerModalLabel">Crea tu cuenta</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="?controller=user&action=store" method="post">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Nombre de usuario</label>
-                            <input type="text" class="form-control" id="username" name="username" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Nombre</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="surnames" class="form-label">Apellidos</label>
-                            <input type="text" class="form-control" id="surnames" name="surnames" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Correo electrónico</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="registerPassword" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" id="registerPassword" name="password" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
-                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
-                        </div>
-                        <input type="hidden" value="product" name="controller">
-                        <?php if (isset($_GET["errorRegister"])) { ?>
-                            <p class="errorMessage"><?= $_GET["errorRegister"] ?></p>
-                        <?php } ?>
-                        <button type="submit" class="btn btn-primary w-100 mt-3">Crear cuenta</button>
-                    </form>
-                    <p class="text-center mt-3">¿Ya tienes una cuenta? <a href="#" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">Inicia session aquí</a></p>
-                </div>
-            </div>
-        </div>
-    </section>
-</header>
 <section class="container mt-5">
     <div class="row">
-        <!-- Columna izquierda: Información personal -->
         <div class="col-lg-6">
-            <!-- Título -->
             <div class="mb-4">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
@@ -183,94 +12,99 @@
                     <h2 class="fw-bold text-gray">Pagos y cobros</h2>
                 </div>
             </div>
-            <!-- Lista de información personal -->
             <div class="card p-4 shadow-sm">
-                <!-- Título -->
                 <h4 class="fw-bold">Métodos de pago</h4>
                 <p class="text-secondary">Añade y gestiona tus métodos de pago a través de nuestro sistema de pago seguro.</p>
 
-                <!-- Método de Pago -->
-                <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-3">
-                    <div class="d-flex align-items-center">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Visa.svg/1200px-Visa.svg.png" alt="VISA" style="width: 40px; height: auto;" class="me-3">
-                        <div>
-                            <p class="mb-0 fw-bold">VISA •••• 1197</p>
-                            <p class="mb-0 text-secondary">Caducidad: 07/2029</p>
-                        </div>
-                    </div>
-                    <!-- Icono de menú -->
-                    <div class="dropdown">
-                        <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-three-dots"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Editar</a></li>
-                            <li><a class="dropdown-item" href="#">Eliminar</a></li>
-                        </ul>
-                    </div>
-                </div>
+                <?php if (!empty($cards)) { ?>
+                    <?php foreach ($cards as $card) {
+                    ?>
+                        <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-3">
+                            <div class="d-flex align-items-center">
+                                <img src="<?= $card->getCardImage() ?>" alt="<?= $card->getCardBrand() ?>" style="width: 40px; height: auto;" class="me-3">
+                                <div>
+                                    <p class="mb-0 fw-bold"><?= $card->getCardBrand() ?> <?= $card->getFormattedCardNumber() ?>
+                                        <?php if ($card->getIsPrimary() == 1) { ?>
+                                            <span class="badge bg-primary ms-2">Principal</span>
+                                        <?php } ?></p>
+                                    <p class="mb-0 text-secondary">Caducidad: <?= $card->getExpirationDate() ?></p>
+                                </div>
 
-                <!-- Botón Añadir método -->
+                            </div>
+                            <div class="dropdown">
+                                <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bi bi-three-dots"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <?php if ($card->getIsPrimary() == 0) { ?>
+                                        <li><a class="dropdown-item" href="<?= url ?>user/primaryEstablish?card_id=<?= $card->getId() ?>">Establecer como principal</a></li>
+                                    <?php } ?>
+                                    <?php if ($card->getIsPrimary() == 0) { ?>
+                                        <li><a class="dropdown-item" href="<?= url ?>user/deleteCard?card_id=<?= $card->getId() ?>">Eliminar</a></li>
+                                    <?php }else{ ?>
+                                        <li><p class="dropdown-item disabled mb-0">Eliminar</p></li>
+                                    <?php } ?>
+                                </ul>
+                            </div>
+                        </div>
+                    <?php } ?>
+                <?php } ?>
+
                 <button class="btn btn-dark w-100" data-bs-toggle="modal" data-bs-target="#addCardModal">Añadir método de pago</button>
             </div>
         </div>
         <div class="col-lg-6">
         </div>
         <div class="modal fade" id="addCardModal" tabindex="-1" aria-labelledby="addCardModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="tarjetaModalLabel">Añade los datos de la tarjeta</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-        <!-- Contenedor principal -->
-        <div class="input-container">
-          <!-- Número de tarjeta -->
-          <div class="input-field">
-            <input type="text" id="numeroTarjeta" placeholder=" " required>
-            <label for="numeroTarjeta">Número de tarjeta</label>
-          </div>
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="tarjetaModalLabel">Añade los datos de la tarjeta</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <form action="<?= url ?>/user/addCard" method="POST">
+                        <div class="modal-body">
+                            <div class="input-container">
+                                <div class="input-field">
+                                    <input type="text" id="numeroTarjeta" class="onlyNumbers" name="cardNumber" placeholder=" " maxlength="16" pattern="\d{16}" required>
+                                    <label for="numeroTarjeta">Número de tarjeta</label>
+                                </div>
+                                <div class="input-row">
+                                    <div class="input-field input-half">
+                                        <input type="text" id="caducidad" name="expirationDate" placeholder=" " maxlength="5" pattern="\d{2}/\d{2}" required>
+                                        <label for="caducidad">Caducidad (MM/AA)</label>
+                                    </div>
+                                    <div class="input-field input-half">
+                                        <input type="text" id="cvv" name="cvv" class="onlyNumbers" placeholder=" " maxlength="3" pattern="\d{3}" required>
+                                        <label for="cvv">CVV</label>
+                                    </div>
+                                </div>
+                                <div class="input-field">
+                                    <input type="text" id="codigoPostal" class="onlyNumbers" name="codPostal" placeholder=" " maxlength="5" pattern="\d{5}" required>
+                                    <label for="codigoPostal">Código postal</label>
+                                </div>
 
-          <!-- Caducidad y CVV -->
-          <div class="input-row">
-            <div class="input-field input-half">
-              <input type="text" id="caducidad" placeholder=" " required>
-              <label for="caducidad">Caducidad (MM/AA)</label>
+                                <div class="input-field">
+                                    <select id="paisRegion" name="country" required>
+                                        <option value="España">España</option>
+                                        <option value="México">México</option>
+                                        <option value="Argentina">Argentina</option>
+                                        <option value="Colombia">Colombia</option>
+                                    </select>
+                                    <label for="paisRegion">País/Región</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer d-flex justify-content-between">
+                            <a href="#" data-bs-dismiss="modal">Cancelar</a>
+                            <button type="submit" class="btn btn-dark">Listo</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="input-field input-half">
-              <input type="text" id="cvv" placeholder=" " required>
-              <label for="cvv">CVV</label>
-            </div>
-          </div>
-
-          <!-- Código postal -->
-          <div class="input-field">
-            <input type="text" id="codigoPostal" placeholder=" " required>
-            <label for="codigoPostal">Código postal</label>
-          </div>
-
-          <!-- País/Región -->
-          <div class="input-field">
-            <select id="paisRegion" required>
-              <option value="España">España</option>
-              <option value="México">México</option>
-              <option value="Argentina">Argentina</option>
-              <option value="Colombia">Colombia</option>
-            </select>
-            <label for="paisRegion">País/Región</label>
-          </div>
         </div>
-      </div>
 
-      <!-- Footer del modal -->
-      <div class="modal-footer d-flex justify-content-between">
-        <a href="#" data-bs-dismiss="modal">Cancelar</a>
-        <button type="button" class="btn btn-dark">Listo</button>
-      </div>
-    </div>
-  </div>
-        </div>
     </div>
 </section>
 <hr class="w-100 mt-5 mb-0">
@@ -315,3 +149,5 @@
         </div>
     </div>
 </footer>
+<script src="<?= url ?>js/caducidad.js"></script>
+<script src="<?= url ?>js/onlyNumbers.js"></script>

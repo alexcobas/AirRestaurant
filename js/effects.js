@@ -84,22 +84,5 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-const alertContainer = document.getElementById('alert-container');
-const buttonsAddCart = document.getElementsByClassName('btn-add-cart');
-
-Array.from(buttonsAddCart).forEach(button => {
-    button.addEventListener('click', () => {
-        const productName = button.getAttribute('data-product-name');
-        alertContainer.innerHTML = `<strong>¡El producto "${productName}" ha sido añadido al carrito!</strong>`;
-        
-        // Mostrar la alerta con la clase "show"
-        alertContainer.classList.add('show');
-
-        // Ocultar la alerta después de 2 segundos
-        setTimeout(() => {
-            alertContainer.classList.remove('show');
-        }, 2000);
-    });
-});
 
 

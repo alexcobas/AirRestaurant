@@ -1,4 +1,5 @@
 <?php
+require($_SERVER['DOCUMENT_ROOT'] . "/AirRestaurant/config/init.php");
 class ingredientController{
     public function show(){
         if(isset($_GET['id'])){

@@ -4,16 +4,21 @@ include_once("models/ProductsDAO.php");
 include_once("models/IngredientsDAO.php");
 include_once("models/CategoriesDAO.php");
 include_once("config/dataBase.php");
-
-class productController{
-    public function index(){
+require($_SERVER['DOCUMENT_ROOT'] . "/AirRestaurant/config/init.php");
+class productController
+{
+    public function index()
+    {
         $products = ProductsDAO::getAll();
         $categories = CategoriesDAO::getAll();
+        $header = "views/headers/header2.php";
         $view = "views/products/index.php";
+        $footer = "views/footers/footer1.php";
         include_once("views/main.php");
     }
-    public function show(){
-        if(isset($_GET['id'])){
+    public function show()
+    {
+        if (isset($_GET['id'])) {
             $id = $_GET['id'];
             $product = ProductsDAO::find($id);
             $view = "views/products/show.php";
@@ -22,12 +27,14 @@ class productController{
             echo "No hay una id.";
         }
     }
-    public function create(){
+    public function create()
+    {
         $ingredients = IngredientsDAO::getAll();
         $view = "views/products/create.php";
         include_once("views/main.php");
     }
-    public function store() {
+    public function store()
+    {
         $name = $_POST["name"];
         $description = $_POST["description"];
         $base_price = $_POST["base_price"];
@@ -41,11 +48,11 @@ class productController{
                 if (isset($data['selected'])) {
                     $ingrediente = IngredientsDAO::find($ingredientId);
                     if ($ingrediente) {
-                        $quantity = isset($data['quantity']) ? intval($data['quantity']) : 1; 
-                        $isOptional = isset($data['optional']) ? 1 : 0; 
+                        $quantity = isset($data['quantity']) ? intval($data['quantity']) : 1;
+                        $isOptional = isset($data['optional']) ? 1 : 0;
                         $ingredientesSeleccionados[] = [
                             'ingredient' => $ingrediente,
-                            'quantity' => $quantity, 
+                            'quantity' => $quantity,
                             'isOptional' => $isOptional,
                         ];
                     }
@@ -53,17 +60,24 @@ class productController{
             }
         }
         ProductsDAO::store($producto, $ingredientesSeleccionados);
-        header("Location: " . url . "/product/");
-    }
-    
-    public function destroy(){
-        ProductsDAO::destroy($_GET['id']);
-        header("Location: " . url . "/product/");
-    }
-    // Funcion temporal
-    public function home(){
-        $view = "views/home/home.php";
-        include_once("views/main.php");
+        header("Location: " . url . "product/");
     }
 
+    public function addToCart()
+    {
+        $productId = $_GET['productId'];
+        $product = ProductsDAO::find($productId);
+
+        if ($product === null) {
+            die("Error: Producto no encontrado con ID: $productId");
+        }
+        $_SESSION['cart'][] = $product;
+        header("Location: " . url . "product/");
+    }
+
+    public function destroy()
+    {
+        ProductsDAO::destroy($_GET['id']);
+        header("Location: " . url . "product/");
+    }
 }
