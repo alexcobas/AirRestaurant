@@ -22,6 +22,7 @@ class productController
             $id = $_GET['id'];
             $product = ProductsDAO::find($id);
             $view = "views/products/show.php";
+            $footer = "views/footers/footer1.php";
             include_once("views/main.php");
         } else {
             echo "No hay una id.";
@@ -60,18 +61,6 @@ class productController
             }
         }
         ProductsDAO::store($producto, $ingredientesSeleccionados);
-        header("Location: " . url . "product/");
-    }
-
-    public function addToCart()
-    {
-        $productId = $_GET['productId'];
-        $product = ProductsDAO::find($productId);
-
-        if ($product === null) {
-            die("Error: Producto no encontrado con ID: $productId");
-        }
-        $_SESSION['cart'][] = $product;
         header("Location: " . url . "product/");
     }
 

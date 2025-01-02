@@ -79,6 +79,7 @@
                 <p class="text-muted mb-0"><?= $cartProduct->getBase_Price(); ?> €</p>
               </div>
             </div>
+            <input type="number" name="" id="" class="" value="0">
             <button class="btn btn-danger btn-sm">Eliminar</button>
           </div>
         </div>
@@ -91,7 +92,7 @@
         <p class="fw-bold mb-0">Total:</p>
         <p class="fw-bold mb-0"><?= number_format($totalPrice, 2) ?> €</p>
       </div>
-      <button type="button" class="btn btn-primary w-100 mt-2">Ir al carrito</button>
+      <button href="<?= url ?>cart/" type="button" class="btn btn-primary w-100 mt-2">Ir al carrito</button>
     </div>
   </div>
     </section>
@@ -182,8 +183,7 @@
             <h1 class="display-4 fw-bold mb-3">Bienvenidos a Air Restaurant</h1>
             <p class="lead mb-4">Descubre los sabores únicos y disfruta de una experiencia gastronómica inolvidable</p>
             <div>
-                <a href="?controller=menu" class="btn btn-primary btn-lg me-2">Ver Menú</a>
-                <a href="?controller=reservations" class="btn btn-outline-light btn-lg">Reservar Ahora</a>
+                <a href="" class="btn btn-outline-light btn-lg">Reservar Ahora</a>
             </div>
         </div>
     </section>

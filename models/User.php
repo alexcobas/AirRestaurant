@@ -271,4 +271,12 @@ class User{
         $emailParts = explode('@', $email);
         return $firstChar . "***@" . $emailParts[1]; 
     }
+    public function getPrimaryCard() {
+        foreach ($this->cards as $card) {
+            if ($card->getIsPrimary()) {
+                return $card;
+            }
+        }
+        return null;
+    }
 }

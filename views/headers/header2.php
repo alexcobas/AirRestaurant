@@ -97,7 +97,7 @@
         <p class="fw-bold mb-0">Total:</p>
         <p class="fw-bold mb-0"><?= number_format($totalPrice, 2) ?> €</p>
       </div>
-      <button type="button" class="btn btn-primary w-100 mt-2">Ir al carrito</button>
+      <a href="<?= url?>cart/" type="button" class="btn btn-primary w-100 mt-2">Ir al carrito</a>
     </div>
   </div>
   <div class="d-flex w-100 justify-content-center mt-4 mb-4">

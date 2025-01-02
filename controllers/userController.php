@@ -11,6 +11,7 @@ class userController
         require($_SERVER['DOCUMENT_ROOT'] . "/AirRestaurant/config/protection.php");
         $header = "views/headers/header3.php";
         $view = "views/users/index.php";
+        $footer = "views/footers/footer1.php";
         include_once("views/main.php");
     }
 
@@ -19,6 +20,7 @@ class userController
         require($_SERVER['DOCUMENT_ROOT'] . "/AirRestaurant/config/protection.php");
         $header = "views/headers/header3.php";
         $view = "views/users/show.php";
+        $footer = "views/footers/footer1.php";
         include_once("views/main.php");
     }
 
@@ -81,6 +83,7 @@ class userController
         require($_SERVER['DOCUMENT_ROOT'] . "/AirRestaurant/config/protection.php");
         $header = "views/headers/header3.php";
         $view = "views/users/personalInfo.php";
+        $footer = "views/footers/footer1.php";
         include_once("views/main.php");
     }
 
@@ -90,6 +93,7 @@ class userController
         $cards = CardsDAO::getUserCards($_SESSION['user']->getId());
         $header = "views/headers/header3.php";
         $view = "views/users/paymentMethods.php";
+        $footer = "views/footers/footer1.php";
         include_once("views/main.php");
     }
 
@@ -152,6 +156,13 @@ class userController
     public function primaryEstablish()
     {
         CardsDAO::primaryEstablish($_GET["card_id"]);
+        foreach ($_SESSION["user"]->getCards() as $card) {
+            if ($card->getId() == $_GET["card_id"]) {
+                $card->setIsPrimary(1);
+            } else {
+                $card->setIsPrimary(0);
+            }
+        }
         header("Location: " . url . "user/paymentMethods");
     }
     public function login()

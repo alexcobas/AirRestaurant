@@ -577,3 +577,25 @@ padding: 0 5px;
 .mb-250{
   margin-bottom: 250px;
 }
+.card-product {
+  border: none;
+}
+
+.custom-input {
+  border-radius: 10px;
+}
+
+.card-thumbnail {
+  width: 50px;
+  height: 50px;
+}
+
+.pay-button {
+  border-radius: 25px;
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.pay-button:hover {
+  background-color: #ff3333;
+}
