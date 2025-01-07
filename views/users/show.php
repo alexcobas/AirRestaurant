@@ -24,7 +24,6 @@
                 <ul class="list-unstyled">
                     <li><i class="bi bi-check-lg"></i> Identidad</li>
                     <li><i class="bi bi-check-lg"></i> Dirección de correo electrónico</li>
-                    <li><i class="bi bi-check-lg"></i> Número de teléfono</li>
                 </ul>
                 <a href="#" class="text-decoration-none">Más información sobre la verificación de la identidad</a>
             </div>

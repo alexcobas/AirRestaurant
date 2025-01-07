@@ -193,6 +193,12 @@ class cartController
             }
         }
     }
+    public function repeatOrder(){
+        $id_order = $_GET["id"];
+        $order = OrdersDAO::find($id_order);
+        $orderId = OrdersDAO::store($order);
+        header("Location: " . url . "user/myOrders");
+    }
     public function removePromotion(){
         unset($_SESSION['offerCart']);
         header("Location: " . url . "cart/");

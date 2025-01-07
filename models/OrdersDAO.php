@@ -137,9 +137,10 @@ class OrdersDAO {
         $result = $stmt->get_result();
         $products = [];
         while ($row = $result->fetch_assoc()) {
-            $product = new Product();
+            $product = new ProductCart();
             $product->setId($row['product_id']);
             $product->setBase_Price($row['custom_price']);
+            $product->setCuantity($row['quantity']);
             $products[] = $product;
         }
         $stmt->close();
@@ -170,24 +171,40 @@ class OrdersDAO {
         $db->close();
         return $products;
     }
-    public static function find($id){
+    public static function find($id) {
         $db = DataBase::connect();
         $stmt = $db->prepare("SELECT * FROM orders WHERE id = ?");
         if (!$stmt) {
-            die("Error en la preparación de la consulta de selección de pedidos: " . mysqli_error($db));
+            die("Error en la preparación de la consulta de selección de pedido: " . mysqli_error($db));
         }
         $stmt->bind_param("i", $id);
-
-        if (!$stmt->execute()) {
-            die("Error al ejecutar la consulta de selección de pedidos: " . mysqli_error($db));
-        }
+        $stmt->execute();
         $result = $stmt->get_result();
-        $order = $result->fetch_object("Order");
-
+    
+        if ($row = $result->fetch_assoc()) {
+            $order = new Order();
+            $order->setId($row['id']);
+            $order->setUser_Id($row['user_id']);
+            if ($row['user_id']) {
+                $order->setUser(UsersDAO::find($row['user_id']));
+            }
+            $order->setCard_Id($row['card_id']);
+            $order->setCard(CardsDAO::find($row['card_id']));
+            $order->setAddress_Id($row['address_id']);
+            $order->setAddress(AddressesDAO::find($row['address_id']));
+            $order->setOrder_Price($row['order_price']);
+            $order->setOrder_Price_Total($row['order_price_total']);
+            $order->setOffer_Id($row['offer_id']);
+            $order->setProducts(self::getProductsByOrderId($row['id']));
+        } else {
+            $order = null;
+        }
+    
         $stmt->close();
         $db->close();
         return $order;
     }
+    
     public static function getUserOrders($id){
         $db = DataBase::connect();
         $stmt = $db->prepare("SELECT * FROM orders WHERE user_id = ?");

@@ -54,6 +54,7 @@
                         <p class="mb-0 text-secondary">Tarjeta <?= $card->getCardBrand() ?> (<?= $card->getFormattedCardNumber() ?>)</p>
                     </div>
                 <?php } ?>
+                <a href="<?= url?>cart/repeatOrder?id=<?= $order->getId()?>" type="button" class="btn btn-primary mt-3">Repetir la compra.</a>
             </div>
         </div>
     </div>
