@@ -182,8 +182,15 @@ class cartController
             $error = "Este código promocional no existe.";
             header("Location: " . url . "cart/?errorOffers=$error");
         } else{
-            $_SESSION["offerCart"] = OffersDAO::getOfferByName($promoCode);
-            header("Location: " . url . "cart/");
+            $fecha_hoy = date('Y-m-d');
+            $offer = OffersDAO::getOfferByName($promoCode);
+            if($fecha_hoy >= $offer->getStartDate() && $fecha_hoy <= $offer->getEndDate()){
+                $_SESSION["offerCart"] = OffersDAO::getOfferByName($promoCode);
+                header("Location: " . url . "cart/");
+            } else{
+                $error = "Este codigo promocional ya ha caducado.";
+                header("Location: " . url . "cart/?errorOffers=$error");
+            }
         }
     }
     public function removePromotion(){

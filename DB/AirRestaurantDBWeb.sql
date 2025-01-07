@@ -15,11 +15,11 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
--- Volcando estructura de base de datos para 4572480_airrestaurant
-CREATE DATABASE IF NOT EXISTS `4572480_airrestaurant` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `4572480_airrestaurant`;
+-- Volcando estructura de base de datos para AirRestaurant
+CREATE DATABASE IF NOT EXISTS `AirRestaurant` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `AirRestaurant`;
 
--- Volcando estructura para tabla 4572480_airrestaurant.addresses
+-- Volcando estructura para tabla AirRestaurant.addresses
 CREATE TABLE IF NOT EXISTS `addresses` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `addresses` (
   CONSTRAINT `addresses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla 4572480_airrestaurant.addresses: ~48 rows (aproximadamente)
+-- Volcando datos para la tabla AirRestaurant.addresses: ~35 rows (aproximadamente)
 DELETE FROM `addresses`;
 INSERT INTO `addresses` (`id`, `user_id`, `address`, `city`, `codPostal`) VALUES
 	(1, NULL, 'Calle Carmen Gqlceran', 'Molins De Rei', '08750'),
@@ -87,7 +87,7 @@ INSERT INTO `addresses` (`id`, `user_id`, `address`, `city`, `codPostal`) VALUES
 	(51, 5, 'Calle Carmen Gqlceran', 'Molins De Rei', '08750'),
 	(52, 5, 'Calle Carmen Gqlceran', 'Molins De Rei', '08750');
 
--- Volcando estructura para tabla 4572480_airrestaurant.cards
+-- Volcando estructura para tabla AirRestaurant.cards
 CREATE TABLE IF NOT EXISTS `cards` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS `cards` (
   CONSTRAINT `cards_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla 4572480_airrestaurant.cards: ~49 rows (aproximadamente)
+-- Volcando datos para la tabla AirRestaurant.cards: ~49 rows (aproximadamente)
 DELETE FROM `cards`;
 INSERT INTO `cards` (`id`, `user_id`, `cardNumber`, `cvv`, `codPostal`, `country`, `expirationDate`, `isPrimary`) VALUES
 	(16, 2, '6456456456456456', '645', '56456', 'España', '64/56', 0),
@@ -159,7 +159,7 @@ INSERT INTO `cards` (`id`, `user_id`, `cardNumber`, `cvv`, `codPostal`, `country
 	(80, NULL, '4234234234242424', '234', '42342', 'España', '42/34', NULL),
 	(81, 7, '4535345435435454', '354', '43545', 'España', '54/35', 1);
 
--- Volcando estructura para tabla 4572480_airrestaurant.categories
+-- Volcando estructura para tabla AirRestaurant.categories
 CREATE TABLE IF NOT EXISTS `categories` (
   `id` int NOT NULL AUTO_INCREMENT,
   `title` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
@@ -167,17 +167,18 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `icon` varchar(50) DEFAULT NULL,
   `img` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla 4572480_airrestaurant.categories: ~4 rows (aproximadamente)
+-- Volcando datos para la tabla AirRestaurant.categories: ~5 rows (aproximadamente)
 DELETE FROM `categories`;
 INSERT INTO `categories` (`id`, `title`, `name`, `icon`, `img`) VALUES
 	(1, 'Hamburguesas', 'Hamburguesa', 'iHamburguer.svg', 'hamburguesa.webp'),
 	(2, 'Bebidas', 'Bebida', 'iWater.svg', 'bebidas.webp'),
 	(3, 'Pizzas', 'Pizza', 'iPizza.svg', 'pizza.webp'),
-	(4, 'Patatas', 'Complemento', 'iFastFood.svg', 'patatas-fritas.webp');
+	(4, 'Complementos', 'Complemento', 'iComplements.png', 'patatas-fritas.webp'),
+	(5, 'Menus', 'Menu', 'iFastFood.svg', 'menuCategory.jpg');
 
--- Volcando estructura para tabla 4572480_airrestaurant.ingredients
+-- Volcando estructura para tabla AirRestaurant.ingredients
 CREATE TABLE IF NOT EXISTS `ingredients` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
@@ -185,7 +186,7 @@ CREATE TABLE IF NOT EXISTS `ingredients` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla 4572480_airrestaurant.ingredients: ~4 rows (aproximadamente)
+-- Volcando datos para la tabla AirRestaurant.ingredients: ~5 rows (aproximadamente)
 DELETE FROM `ingredients`;
 INSERT INTO `ingredients` (`id`, `name`, `extra_price`) VALUES
 	(1, 'Tomate', 0.50),
@@ -194,7 +195,7 @@ INSERT INTO `ingredients` (`id`, `name`, `extra_price`) VALUES
 	(4, 'Lechuga', 0.25),
 	(5, 'Cebolla', 0.10);
 
--- Volcando estructura para tabla 4572480_airrestaurant.offers
+-- Volcando estructura para tabla AirRestaurant.offers
 CREATE TABLE IF NOT EXISTS `offers` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
@@ -202,14 +203,15 @@ CREATE TABLE IF NOT EXISTS `offers` (
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla 4572480_airrestaurant.offers: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla AirRestaurant.offers: ~2 rows (aproximadamente)
 DELETE FROM `offers`;
 INSERT INTO `offers` (`id`, `name`, `discount_percentage`, `start_date`, `end_date`) VALUES
-	(1, 'prueba', 2.00, '2025-01-03', '2025-01-05');
+	(1, 'Airbnb', 5.00, '2025-01-03', '2025-01-05'),
+	(2, 'Bernat el ferrer', 10.00, '2025-01-07', '2025-01-22');
 
--- Volcando estructura para tabla 4572480_airrestaurant.orders
+-- Volcando estructura para tabla AirRestaurant.orders
 CREATE TABLE IF NOT EXISTS `orders` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int DEFAULT NULL,
@@ -230,7 +232,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   CONSTRAINT `orders_ibfk_4` FOREIGN KEY (`offer_id`) REFERENCES `offers` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla 4572480_airrestaurant.orders: ~40 rows (aproximadamente)
+-- Volcando datos para la tabla AirRestaurant.orders: ~44 rows (aproximadamente)
 DELETE FROM `orders`;
 INSERT INTO `orders` (`id`, `user_id`, `card_id`, `address_id`, `order_price`, `offer_id`, `order_price_total`, `created_at`) VALUES
 	(1, 5, 28, NULL, 19.45, NULL, NULL, '2025-01-02 11:31:58'),
@@ -278,7 +280,7 @@ INSERT INTO `orders` (`id`, `user_id`, `card_id`, `address_id`, `order_price`, `
 	(44, 5, 28, 49, 38.9, NULL, 38.9, '2025-01-07 11:58:59'),
 	(45, 5, 28, 51, 51.35, NULL, 51.35, '2025-01-07 15:56:50');
 
--- Volcando estructura para tabla 4572480_airrestaurant.order_product
+-- Volcando estructura para tabla AirRestaurant.order_product
 CREATE TABLE IF NOT EXISTS `order_product` (
   `id` int NOT NULL AUTO_INCREMENT,
   `order_id` int DEFAULT NULL,
@@ -292,7 +294,7 @@ CREATE TABLE IF NOT EXISTS `order_product` (
   CONSTRAINT `order_product_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla 4572480_airrestaurant.order_product: ~65 rows (aproximadamente)
+-- Volcando datos para la tabla AirRestaurant.order_product: ~80 rows (aproximadamente)
 DELETE FROM `order_product`;
 INSERT INTO `order_product` (`id`, `order_id`, `product_id`, `custom_price`, `quantity`) VALUES
 	(1, 3, 9, 12.45, 1),
@@ -376,7 +378,7 @@ INSERT INTO `order_product` (`id`, `order_id`, `product_id`, `custom_price`, `qu
 	(81, 45, 8, 15.95, 2),
 	(82, 45, 9, 12.45, 1);
 
--- Volcando estructura para tabla 4572480_airrestaurant.products
+-- Volcando estructura para tabla AirRestaurant.products
 CREATE TABLE IF NOT EXISTS `products` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
@@ -387,16 +389,25 @@ CREATE TABLE IF NOT EXISTS `products` (
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `products_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla 4572480_airrestaurant.products: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla AirRestaurant.products: ~12 rows (aproximadamente)
 DELETE FROM `products`;
 INSERT INTO `products` (`id`, `name`, `description`, `base_price`, `created_at`, `category_id`) VALUES
-	(1, 'Hamburgesa', 'Hamburguesa basica', 15, '2024-11-09 13:28:55', 1),
-	(8, 'Hamburguesa pulled pork', 'Una hamburguesa con una riquisima carne de cerdo ahumada.', 15.95, '2024-11-16 10:09:44', 1),
-	(9, 'Pizza barbacoa', 'Una deliciosa pizza barbacoa', 12.45, '2024-11-16 09:41:51', 3);
+	(1, 'Hamburgesa completa', 'Hamburguesa basica', 15, '2024-11-09 13:28:55', 1),
+	(8, 'Hamburguesa pulled pork', 'Una hamburguesa con una riquisima carne de cerdo ahumada.', 16.95, '2024-11-16 10:09:44', 1),
+	(9, 'Pizza barbacoa', 'Una deliciosa pizza barbacoa.', 12.45, '2024-11-16 09:41:51', 3),
+	(10, 'Pizza de jamon y queso', 'La pizza que le gusta a todos!', 11.55, '2025-01-07 20:06:24', 3),
+	(11, 'CocaCola', 'CocaCola.', 2, '2025-01-07 20:07:10', 2),
+	(12, 'Agua pequeña', 'Agua pequeña (330ml).', 1, '2025-01-07 20:09:32', 2),
+	(13, 'Fanta', 'Fanta.', 1.5, '2025-01-07 21:10:07', 2),
+	(14, 'Cerveza', 'Cerveza.', 2.25, '2025-01-07 20:10:46', 2),
+	(15, 'Bolitas de pollo', 'Bolas de pollo rebozado.(6 unidades)', 7, '2025-01-07 20:11:38', 4),
+	(16, 'Hamburguesa picante', 'Una hamburguesa con un toque picanton.', 14.55, '2025-01-07 20:12:33', 1),
+	(17, 'Patatas fritas', 'Patatas fritas.', 3, '2025-01-07 20:34:07', 4),
+	(18, 'Menu AirHamburguer', 'Un menu completo con hamburgesa patatas y bebida.', 18.55, '2025-01-07 20:38:48', 5);
 
--- Volcando estructura para tabla 4572480_airrestaurant.products_images
+-- Volcando estructura para tabla AirRestaurant.products_images
 CREATE TABLE IF NOT EXISTS `products_images` (
   `id` int NOT NULL AUTO_INCREMENT,
   `product_id` int NOT NULL,
@@ -404,9 +415,9 @@ CREATE TABLE IF NOT EXISTS `products_images` (
   PRIMARY KEY (`id`),
   KEY `fk_product` (`product_id`),
   CONSTRAINT `fk_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla 4572480_airrestaurant.products_images: ~7 rows (aproximadamente)
+-- Volcando datos para la tabla AirRestaurant.products_images: ~16 rows (aproximadamente)
 DELETE FROM `products_images`;
 INSERT INTO `products_images` (`id`, `product_id`, `photo_archive_name`) VALUES
 	(1, 1, 'HamburguesaClasica1.jpg'),
@@ -415,9 +426,18 @@ INSERT INTO `products_images` (`id`, `product_id`, `photo_archive_name`) VALUES
 	(10, 8, 'hamburguesaPulledPork1.webp'),
 	(11, 9, 'pizzaBarbacoa1.webp'),
 	(12, 9, 'pizzaBarbacoa2.jpg'),
-	(13, 9, 'pizzaBarbacoa3.jpg');
+	(13, 9, 'pizzaBarbacoa3.jpg'),
+	(14, 12, 'agua330ml.jpg'),
+	(15, 13, 'fanta.jpg'),
+	(16, 14, 'cerveza.png'),
+	(17, 11, 'cocacola.jpg'),
+	(18, 16, 'hamburguesa-picante.jpg'),
+	(19, 15, 'bolitas-de-pollo.png'),
+	(20, 10, 'pizza-jamon-y-queso.jpg'),
+	(21, 17, 'patatas-fritas-c.jpg'),
+	(22, 18, 'menu_AirMenu.png');
 
--- Volcando estructura para tabla 4572480_airrestaurant.product_ingredients
+-- Volcando estructura para tabla AirRestaurant.product_ingredients
 CREATE TABLE IF NOT EXISTS `product_ingredients` (
   `product_id` int NOT NULL,
   `ingredient_id` int NOT NULL,
@@ -430,10 +450,10 @@ CREATE TABLE IF NOT EXISTS `product_ingredients` (
   CONSTRAINT `product_ingredients_ibfk_2` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredients` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla 4572480_airrestaurant.product_ingredients: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla AirRestaurant.product_ingredients: ~0 rows (aproximadamente)
 DELETE FROM `product_ingredients`;
 
--- Volcando estructura para tabla 4572480_airrestaurant.product_ingredients_defaults
+-- Volcando estructura para tabla AirRestaurant.product_ingredients_defaults
 CREATE TABLE IF NOT EXISTS `product_ingredients_defaults` (
   `order_product_id` int NOT NULL,
   `ingredient_id` int NOT NULL,
@@ -445,10 +465,10 @@ CREATE TABLE IF NOT EXISTS `product_ingredients_defaults` (
   CONSTRAINT `product_ingredients_defaults_ibfk_2` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredients` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla 4572480_airrestaurant.product_ingredients_defaults: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla AirRestaurant.product_ingredients_defaults: ~0 rows (aproximadamente)
 DELETE FROM `product_ingredients_defaults`;
 
--- Volcando estructura para tabla 4572480_airrestaurant.users
+-- Volcando estructura para tabla AirRestaurant.users
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
@@ -463,7 +483,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla 4572480_airrestaurant.users: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla AirRestaurant.users: ~5 rows (aproximadamente)
 DELETE FROM `users`;
 INSERT INTO `users` (`id`, `username`, `name`, `surnames`, `email`, `password_hash`, `role`, `img_profile`, `created_at`) VALUES
 	(2, 'Lolozaca', 'Dolores', 'Zarate Castillo', 'lolozaca@gmail.com', '$2y$10$1jtbyfV2oLeQKcDKzxjPFeb6CGbhckT6y0orMpef1zTzgyW8bSha2', 'user', NULL, '2024-12-10 19:51:59'),
