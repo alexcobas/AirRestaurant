@@ -16,7 +16,7 @@
             </a>
         </div>
         <div class="col">
-            <a href="#" class="custom-card text-black">
+            <a href="<?= url ?>user/loginAndSecurity" class="custom-card text-black">
                 <div class="icon-wrapper mb-2">
                     <i class="bi bi-shield-lock fs-3"></i>
                 </div>
@@ -34,30 +34,12 @@
             </a>
         </div>
         <div class="col">
-            <a href="#" class="custom-card text-black">
+            <a href="<?= url ?>user/myOrders" class="custom-card text-black">
                 <div class="icon-wrapper mb-2">
-                    <i class="bi bi-bell fs-3"></i>
+                    <i class="bi bi-box2 fs-3"></i>
                 </div>
-                <h5 class="card-title">Notificaciones</h5>
-                <p class="text-muted">Configura tus preferencias de notificación para emails y alertas.</p>
-            </a>
-        </div>
-        <div class="col">
-            <a href="#" class="custom-card text-black">
-                <div class="icon-wrapper mb-2">
-                    <i class="bi bi-eye fs-3"></i>
-                </div>
-                <h5 class="card-title">Privacidad y datos</h5>
-                <p class="text-muted">Controla cómo compartes tu información personal con terceros.</p>
-            </a>
-        </div>
-        <div class="col">
-            <a href="#" class="custom-card text-black">
-                <div class="icon-wrapper mb-2">
-                    <i class="bi bi-globe fs-3"></i>
-                </div>
-                <h5 class="card-title">Preferencias globales</h5>
-                <p class="text-muted">Selecciona tu idioma, zona horaria y moneda predeterminados.</p>
+                <h5 class="card-title">Pedidos</h5>
+                <p class="text-muted">Consulta todos tus pedidos y vuelve a repetir uno si te gusta.</p>
             </a>
         </div>
     </div>

@@ -63,4 +63,14 @@ class CardsDAO {
         $stmt->execute();
         $db->close();
     }
+    public static function find($id){
+        $db = DataBase::connect();
+        $stmt = $db->prepare("SELECT * FROM cards WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $card = $result->fetch_object('Card');
+        $db->close();
+        return $card;
+    }
 }

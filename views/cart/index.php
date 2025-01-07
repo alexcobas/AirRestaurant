@@ -3,7 +3,12 @@
     <div class="row">
         <div class="col-12">
             <div class="d-flex align-items-center mb-4">
-                <i class="bi bi-chevron-left me-3" style="font-size: 1.5rem; cursor: pointer;"></i>
+                <?php if (!isset($_GET["view"])){ ?>
+                    <a href="<?= url ?>home/"><i class="bi bi-chevron-left me-3 text-black" style="font-size: 1.5rem; cursor: pointer;"></i></a>
+                <?php }else{ ?>
+                    <a href="<?= url . $_GET["view"]?>/"><i class="bi bi-chevron-left me-3 text-black" style="font-size: 1.5rem; cursor: pointer;"></i></a>
+                <?php } ?>
+                
                 <h2 class="fw-bold mb-0">Confirmar y pagar</h2>
             </div>
         </div>
@@ -16,49 +21,49 @@
             <!-- Products -->
             <h5 class="mb-3">Tus productos</h5>
             <ul class="list-group mb-4">
-                <?php if (!empty($cart)): ?>
-                    <?php foreach ($cart as $product): ?>
+                <?php if (!empty($cart)){ ?>
+                    <?php foreach ($cart as $product){ ?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div>
-                                <h6 class="mb-1"><?= htmlspecialchars($product->getName()) ?></h6>
+                                <h6 class="mb-1"><?= htmlspecialchars($product->getName()) ?> x <?= $product->getCuantity(); ?></h6>
                                 <small class="text-muted"><?= htmlspecialchars($product->getDescription()) ?></small>
                             </div>
                             <div>
-                                <span class="text-muted me-3"><?= number_format($product->getBase_price(), 2) ?>€</span>
-                                <a href="#" class="text-decoration-none">Editar</a>
+                                <span class="text-muted me-3"><?= number_format($product->getBase_price() * $product->getCuantity(), 2) ?>€</span>
+                                <a href="<?= url ?>/cart/removeFromCart?productId=<?= $product->getId() ?>" class="text-decoration-none deleteColorText">Eliminar</a>
                             </div>
                         </li>
-                    <?php endforeach; ?>
-                <?php else: ?>
+                    <?php } ?>
+                <?php } else{ ?>
                     <li class="list-group-item text-center">El carrito está vacío.</li>
-                <?php endif; ?>
+                <?php } ?>
             </ul>
 
             <!-- Payment Form -->
             <h5 class="mb-3">Pagar con</h5>
             <form method="POST" action="<?= url ?>/cart/createOrder">
-                <?php if (!empty($cards)): ?>
+                <?php if (!empty($cards)){ ?>
                     <!-- Tarjetas guardadas -->
                     <div class="mb-3">
                         <label for="savedCards" class="form-label">Selecciona una tarjeta guardada</label>
                         <select class="form-select custom-input" id="savedCards" name="idCardSelect">
-                            <?php foreach ($cards as $card){ 
-                                if($card->getIsPrimary() == 1){ ?>
-                                <option value="<?= htmlspecialchars($card->getId()) ?>">
-                                    <?= htmlspecialchars($card->getCardBrand()) ?> - <?= htmlspecialchars($card->getFormattedCardNumber()) ?>
-                                </option>
-                            <?php } 
+                            <?php foreach ($cards as $card) {
+                                if ($card->getIsPrimary() == 1) { ?>
+                                    <option value="<?= htmlspecialchars($card->getId()) ?>">
+                                        <?= htmlspecialchars($card->getCardBrand()) ?> - <?= htmlspecialchars($card->getFormattedCardNumber()) ?>
+                                    </option>
+                            <?php }
                             } ?>
-                            <?php foreach ($cards as $card){ 
-                                if($card->getIsPrimary() != 1){ ?>
-                                <option value="<?= htmlspecialchars($card->getId()) ?>">
-                                    <?= htmlspecialchars($card->getCardBrand()) ?> - <?= htmlspecialchars($card->getFormattedCardNumber()) ?>
-                                </option>
-                            <?php } 
+                            <?php foreach ($cards as $card) {
+                                if ($card->getIsPrimary() != 1) { ?>
+                                    <option value="<?= htmlspecialchars($card->getId()) ?>">
+                                        <?= htmlspecialchars($card->getCardBrand()) ?> - <?= htmlspecialchars($card->getFormattedCardNumber()) ?>
+                                    </option>
+                            <?php }
                             } ?>
                         </select>
                     </div>
-                <?php endif; ?>
+                <?php } ?>
                 <!-- Usar nueva tarjeta -->
                 <div class="form-check mb-3">
                     <input class="form-check-input" type="checkbox" id="enableNewCard" name="newTarget">
@@ -67,7 +72,7 @@
                     </label>
                 </div>
                 <!-- Nueva tarjeta -->
-                <div id="newCardForm" style="display: none;">
+                <div id="newCardForm" class="mb-3" style="display: none;">
                     <div class="mb-3">
                         <label for="cardNumber" class="form-label">Número de tarjeta</label>
                         <input type="text" class="form-control custom-input onlyNumbers" id="cardNumber" name="cardNumber" placeholder="•••• •••• •••• ••••" maxlength="16" pattern="\d{16}">
@@ -96,8 +101,29 @@
                         </select>
                     </div>
                 </div>
-                <input type="hidden" name="totalPrice" value="<?= number_format($total + 7, 2)?>">
-                <button type="submit" class="btn pay-button w-100" <?= count($_SESSION["cart"]) > 0 ? "" : "disabled"?>>Pagar ahora</button>
+                <h5 class="mb-3">Añade una direccion de entrega</h5>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Dirección</label>
+                    <input type="text" class="form-control custom-input" id="address" name="address" placeholder="Calle Principal, 123" required>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label for="city" class="form-label">Ciudad</label>
+                        <input type="text" class="form-control custom-input" id="city" name="city" placeholder="Ciudad" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="postalCode" class="form-label">Código postal</label>
+                        <input type="text" class="form-control custom-input onlyNumbers" id="postalCode" name="addressPostalCode" placeholder="12345" maxlength="5" pattern="\d{5}" required>
+                    </div>
+                </div>
+                <?php if (isset($_GET["view"])) { ?>
+                    <input type="hidden" name="controller" value="<?= $_GET["view"] ?>">
+                <?php } ?>
+                <input type="hidden" name="totalPrice" value="<?= number_format($total + 7, 2) ?>">
+                <?php if ($totalOffers != null) { ?>
+                    <input type="hidden" name="totalOffers" value="<?= number_format($totalOffers + 7, 2) ?>">
+                <?php } ?>
+                <button type="submit" class="btn pay-button btn-primary w-100" <?= count($_SESSION["cart"]) > 0 ? "" : "disabled" ?>>Pagar ahora</button>
             </form>
         </div>
 
@@ -119,13 +145,37 @@
                             <span>Impuestos</span>
                             <span>3,00€</span>
                         </li>
+                        <?php if ($totalOffers != null) { ?>
+                            <li class="d-flex justify-content-between">
+                                <span><a href="<?= url?>cart/removePromotion" class="text-decoration-none text-gray"><i class="bi bi-trash-fill"></i></a>  Código promocional "<?= $offer->getName() ?>"</span>
+                                <span><?= number_format($totalOffers - $total, 2) ?>€</span>
+                            </li>
+                        <?php } ?>
                     </ul>
                     <hr>
                     <div class="d-flex justify-content-between fw-bold">
                         <span>Total</span>
-                        <span><?= number_format($total + 7, 2) ?>€</span>
+                        <<?= $totalOffers == null ? "span" : "del" ?>>
+                            <?= number_format($total + 7, 2) ?>€
+                        </<?= $totalOffers == null ? "span" : "del" ?>>
                     </div>
+                    <?php if ($totalOffers != null) { ?>
+                        <div class="d-flex justify-content-between fw-bold">
+                            <span></span>
+                            <span><?= number_format($totalOffers + 7, 2) ?>€</span>
+                        </div>
+                    <?php } ?>
                 </div>
+                <form action="<?= url ?>cart/addPromotion" method="POST">
+                    <div class="mb-3">
+                        <h5><label for="promo-code" class="form-label">Código promocional</label></h5>
+                        <input type="text" id="promo-code" name="promo_code" class="form-control" placeholder="Introduce tu código" required>
+                        <button type="submit" class="btn btn-primary mt-2">Aplicar</button>
+                        <?php if (isset($_GET["errorOffers"])) { ?>
+                            <p class="errorMessage"><?= $_GET["errorOffers"] ?></p>
+                        <?php } ?>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -135,35 +185,35 @@
 
 <script>
     //Este script esta en el php porque usa funciones php.
-    document.addEventListener("DOMContentLoaded", function () {
-    const savedCardsSelect = document.getElementById("savedCards");
-    const enableNewCardCheckbox = document.getElementById("enableNewCard");
-    const newCardForm = document.getElementById("newCardForm");
-    const payButton = document.querySelector(".pay-button");
+    document.addEventListener("DOMContentLoaded", function() {
+        const savedCardsSelect = document.getElementById("savedCards");
+        const enableNewCardCheckbox = document.getElementById("enableNewCard");
+        const newCardForm = document.getElementById("newCardForm");
+        const payButton = document.querySelector(".pay-button");
 
-    const userSession = <?php echo isset($_SESSION["user"]) ? 'true' : 'false'; ?>;
-    const cartItemCount = <?php echo isset($_SESSION["cart"]) ? count($_SESSION["cart"]) : 0; ?>;
+        const userSession = <?php echo isset($_SESSION["user"]) ? 'true' : 'false'; ?>;
+        const cartItemCount = <?php echo isset($_SESSION["cart"]) ? count($_SESSION["cart"]) : 0; ?>;
 
-    function updateButtonState() {
-        if (cartItemCount < 1) {
-            payButton.disabled = true; 
-            return;
+        function updateButtonState() {
+            if (cartItemCount < 1) {
+                payButton.disabled = true;
+                return;
+            }
+
+            if (userSession) {
+                payButton.disabled = false;
+            } else {
+                payButton.disabled = !enableNewCardCheckbox.checked;
+            }
         }
 
-        if (userSession) {
-            payButton.disabled = false; 
-        } else {
-            payButton.disabled = !enableNewCardCheckbox.checked; 
-        }
-    }
+        enableNewCardCheckbox.addEventListener("change", function() {
+            const isChecked = enableNewCardCheckbox.checked;
+            newCardForm.style.display = isChecked ? "block" : "none";
+            if (savedCardsSelect) savedCardsSelect.disabled = isChecked;
+            updateButtonState();
+        });
 
-    enableNewCardCheckbox.addEventListener("change", function () {
-        const isChecked = enableNewCardCheckbox.checked;
-        newCardForm.style.display = isChecked ? "block" : "none";
-        if (savedCardsSelect) savedCardsSelect.disabled = isChecked;
         updateButtonState();
     });
-
-    updateButtonState();
-});
 </script>

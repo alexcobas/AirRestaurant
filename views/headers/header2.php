@@ -1,3 +1,22 @@
+<?php
+$filter = null;
+if (isset($_GET['filter'])) {
+  $filter = (int)$_GET['filter'];
+  if ($filter == 0) {
+    $filter = null;
+  } else {
+    $products = array_filter($products, function ($product) use ($filter) {
+      return $product->getCategory()->getId() === $filter;
+    });
+  }
+}
+if (isset($_GET['filterName'])) {
+  $filterName = trim($_GET['filterName']);
+  $products = array_filter($products, function ($product) use ($filterName) {
+    return stripos($product->getName(), $filterName) !== false;
+  });
+}
+?>
 <header class="fixed-top bg-white">
   <nav class="navbar navbar-expand-lg container mt-0">
     <div class="container-fluid">
@@ -23,7 +42,12 @@
           <div class="d-flex pe-4 align-items-center">
             <span class="material-symbols-outlined icon-24" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas" aria-controls="cartOffcanvas">shopping_cart</span>
             <span id="numProducts">
-            <?= count($_SESSION["cart"]) < 100 ? count($_SESSION["cart"]) : '99+' ?>
+              <?php
+              $totalProducts = 0;
+              foreach ($_SESSION['cart'] as $product) {
+                $totalProducts += $product->getCuantity();
+              } ?>
+              <?= $totalProducts < 100 ? $totalProducts : '99+' ?>
             </span>
           </div>
 
@@ -38,14 +62,11 @@
                 <li><a class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">Regístrate</a></li>
               <?php } else { ?>
                 <li><a class="dropdown-item" href="<?= url ?>user/">Cuenta</a></li>
-                <li><a class="dropdown-item" href="<?= url ?>user/order">Ver mis pedidos</a></li>
+                <li><a class="dropdown-item" href="<?= url ?>user/myOrders">Ver mis pedidos</a></li>
               <?php } ?>
               <li>
                 <hr class="dropdown-divider">
               </li>
-              <li><a class="dropdown-item" href="#">Tarjetas regalo</a></li>
-              <li><a class="dropdown-item" href="#">Pon tu casa en Airbnb</a></li>
-              <li><a class="dropdown-item" href="#">Ofrece una experiencia</a></li>
               <li><a class="dropdown-item" href="#">Centro de ayuda</a></li>
               <?php if (!empty($_SESSION["user"])) { ?>
                 <li>
@@ -81,15 +102,20 @@
               <img src="<?= url ?>img/<?= $photo ?>" alt="<?= $product->getName() ?>" class="img-thumbnail" style="width: 70px; height: 70px;">
               <div class="ms-3">
                 <p class="mb-0 fw-bold"><?= $product->getName(); ?></p>
+                <p class="mb-0"> x <?= $product->getCuantity(); ?></p>
                 <p class="text-muted mb-0"><?= $product->getCategory()->getName(); ?></p>
                 <p class="text-muted mb-0"><?= $product->getBase_Price(); ?> €</p>
               </div>
             </div>
-            <button class="btn btn-danger btn-sm">Eliminar</button>
+            <form action="<?= url ?>cart/removeFromCartHeader" method="POST">
+              <input type="hidden" name="productId" value="<?= $product->getId() ?>">
+              <input type="hidden" name="controller" value="<?= $controller ?>">
+              <button class="btn btn-danger btn-sm">Eliminar</button>
+            </form>
           </div>
         </div>
       <?php
-        $totalPrice += $product->getBase_Price();
+        $totalPrice += ($product->getBase_Price() * $product->getCuantity());
       } ?>
     </div>
     <div class="offcanvas-footer border-top p-3">
@@ -97,7 +123,7 @@
         <p class="fw-bold mb-0">Total:</p>
         <p class="fw-bold mb-0"><?= number_format($totalPrice, 2) ?> €</p>
       </div>
-      <a href="<?= url?>cart/" type="button" class="btn btn-primary w-100 mt-2">Ir al carrito</a>
+      <a href="<?= url ?>cart/?view=<?= $controller ?>" type="button" class="btn btn-primary w-100 mt-2">Ir al carrito</a>
     </div>
   </div>
   <div class="d-flex w-100 justify-content-center mt-4 mb-4">

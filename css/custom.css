@@ -3025,20 +3025,20 @@ textarea.form-control-lg {
   --bs-btn-disabled-border-color: #FF5A5F; /* Borde deshabilitado */
 }
 .btn-secondary {
-  --bs-btn-color: #fff;
-  --bs-btn-bg: #6c757d;
-  --bs-btn-border-color: #6c757d;
-  --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: rgb(91.8, 99.45, 106.25);
-  --bs-btn-hover-border-color: rgb(86.4, 93.6, 100);
-  --bs-btn-focus-shadow-rgb: 130, 138, 145;
-  --bs-btn-active-color: #fff;
-  --bs-btn-active-bg: rgb(86.4, 93.6, 100);
-  --bs-btn-active-border-color: rgb(81, 87.75, 93.75);
-  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-  --bs-btn-disabled-color: #fff;
-  --bs-btn-disabled-bg: #6c757d;
-  --bs-btn-disabled-border-color: #6c757d;
+  --bs-btn-color: #ffffff; /* Texto blanco */
+  --bs-btn-bg: #008489; /* Fondo azul claro */
+  --bs-btn-border-color: #008489; /* Borde del mismo color */
+  --bs-btn-hover-color: #ffffff; /* Texto blanco al pasar el mouse */
+  --bs-btn-hover-bg: #008489; /* Azul más oscuro para hover */
+  --bs-btn-hover-border-color: #008489; /* Borde más oscuro en hover */
+  --bs-btn-focus-shadow-rgb: 74, 144, 226; /* Sombra azul clara */
+  --bs-btn-active-color: #ffffff; /* Texto blanco al hacer clic */
+  --bs-btn-active-bg: #008489; /* Azul aún más oscuro para estado activo */
+  --bs-btn-active-border-color: #008489; /* Borde más oscuro para estado activo */
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.2); /* Sombra interna más visible */
+  --bs-btn-disabled-color: #ffffff; /* Texto blanco para botón deshabilitado */
+  --bs-btn-disabled-bg: #a0c1e3; /* Azul claro apagado */
+  --bs-btn-disabled-border-color: #a0c1e3; /* Borde apagado */
 }
 
 .btn-success {

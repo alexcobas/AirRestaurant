@@ -9,6 +9,8 @@ class User{
     private $role;
     private $img_profile;
     private $cards;
+    private $addresses;
+    private $orders;
     private $created_at;
     private $accountAge;
     private $accountAgeUnitLabel;
@@ -193,6 +195,22 @@ class User{
                 break;
             }
         }
+    }
+    public function setAddresses($addresses){
+        $this->addresses = $addresses;
+
+        return $this;
+    }
+    public function getAddresses() {
+        return $this->addresses;
+    }
+    public function setOrders($orders){
+        $this->orders = $orders;
+
+        return $this;
+    }
+    public function getOrders() {
+        return $this->orders;
     }
     /**
      * Get the value of created_at

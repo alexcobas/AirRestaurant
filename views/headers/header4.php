@@ -12,18 +12,6 @@
                     <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                     </ul>
                     <div class="d-flex align-items-center">
-                        <div class="d-flex pe-4 align-items-center">
-                            <span class="material-symbols-outlined icon-24" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas" aria-controls="cartOffcanvas">shopping_cart</span>
-                            <span id="numProducts">
-                            <?php 
-                                $totalProducts = 0;
-                                foreach ($_SESSION['cart'] as $product) { 
-                                    $totalProducts += $product->getCuantity();
-                                } ?>
-                                <?= $totalProducts < 100 ? $totalProducts : '99+' ?>
-                            </span>
-                        </div>
-
                         <div class="dropdown">
                             <div class="d-flex align-items-center" id="customDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
                                 <span class="material-symbols-outlined icon-24">menu</span>
@@ -34,23 +22,12 @@
                                 <?php } ?>
                             </div>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="customDropdown" style="right: 0; left: auto; transform-origin: right top;">
-                                <?php if (empty($_SESSION["user"])) { ?>
-                                    <li><a class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#loginModal">Iniciar sesión</a></li>
-                                    <li><a class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">Regístrate</a></li>
-                                <?php } else { ?>
-                                    <li><a class="dropdown-item" href="<?= url ?>user/">Cuenta</a></li>
-                                    <li><a class="dropdown-item" href="<?= url ?>user/myOrders">Ver mis pedidos</a></li>
-                                <?php } ?>
+                                <li><a class="dropdown-item" href="<?= url ?>admin/profile">Mi perfil</a></li>
+                                <li><a class="dropdown-item" href="<?= url ?>admin/settings">Configuraciones</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="#">Centro de ayuda</a></li>
-                                <?php if (!empty($_SESSION["user"])) { ?>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item" href="<?= url ?>user/logout">Cerrar sesion</a></li>
-                                <?php } ?>
+                                <li><a class="dropdown-item" href="<?= url ?>user/logout">Cerrar sesión</a></li>
                             </ul>
                         </div>
                     </div>
@@ -58,52 +35,6 @@
             </div>
         </nav>
         <hr class="line-border">
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
-            <div class="offcanvas-header">
-                <h5 id="cartOffcanvasLabel">Carrito de Compras</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div class="offcanvas-body">
-                <?php $totalPrice = 0 ?>
-                <?php foreach ($_SESSION['cart'] as $product) { ?>
-                    <div class="product-item border-bottom pb-2">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <?php
-                                $image = $product->getImages();
-                                if ($image && isset($image[0]) && method_exists($image[0], 'getPhoto_archive_name')) {
-                                    $photo = $image[0]->getPhoto_archive_name();
-                                } else {
-                                    $photo = "default.jpg";
-                                }
-                                ?>
-                                <img src="<?= url ?>img/<?= $photo ?>" alt="<?= $product->getName() ?>" class="img-thumbnail" style="width: 70px; height: 70px;">
-                                <div class="ms-3">
-                                    <p class="mb-0 fw-bold"><?= $product->getName(); ?></p>
-                                    <p class="mb-0"> x <?= $product->getCuantity(); ?></p>
-                                    <p class="text-muted mb-0"><?= $product->getCategory()->getName(); ?></p>
-                                    <p class="text-muted mb-0"><?= $product->getBase_Price(); ?> €</p>
-                                </div>
-                            </div>
-                            <form action="<?= url ?>cart/removeFromCartHeader" method="POST">
-                                <input type="hidden" name="productId" value="<?= $product->getId() ?>">
-                                <input type="hidden" name="controller" value="<?= $controller ?>">
-                                <button class="btn btn-danger btn-sm">Eliminar</button>
-                            </form>
-                        </div>
-                    </div>
-                <?php
-                    $totalPrice += ($product->getBase_Price() * $product->getCuantity());
-                } ?>
-            </div>
-            <div class="offcanvas-footer border-top p-3">
-                <div class="d-flex justify-content-between">
-                    <p class="fw-bold mb-0">Total:</p>
-                    <p class="fw-bold mb-0"><?= number_format($totalPrice, 2) ?> €</p>
-                </div>
-                <a href="<?= url ?>cart/?view=<?= $controller ?>" type="button" class="btn btn-primary w-100 mt-2">Ir al carrito</a>
-            </div>
-        </div>
     </section>
     <section class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">

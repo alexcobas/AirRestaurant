@@ -1,22 +1,4 @@
-<?php
-$filter = null;
-if (isset($_GET['filter'])) {
-  $filter = (int)$_GET['filter'];
-  if ($filter == 0) {
-    $filter = null;
-  } else {
-    $products = array_filter($products, function ($product) use ($filter) {
-      return $product->getCategory()->getId() === $filter;
-    });
-  }
-}
-if (isset($_GET['filterName'])) {
-  $filterName = trim($_GET['filterName']);
-  $products = array_filter($products, function ($product) use ($filterName) {
-    return stripos($product->getName(), $filterName) !== false;
-  });
-}
-?>
+
 
 
 <section class="container my-5">
@@ -64,7 +46,7 @@ if (isset($_GET['filterName'])) {
               <h5 class="card-title"><?= $product->getName(); ?></h5>
               <p class="card-text"><?= $product->getCategory()->getName(); ?></p>
               <p class="card-text fw-bold"><?= $product->getBase_Price() ?> €</p>
-              <form action="<?= url ?>product/addToCart/" method="GET">
+              <form action="<?= url ?>cart/addToCart/" method="GET">
                 <input type="hidden" name="productId" value="<?= $product->getId() ?>">
                 <button type="submit" class="btn btn-primary" aria-label="Añadir al carrito">Añadir al carrito</button>
               </form>

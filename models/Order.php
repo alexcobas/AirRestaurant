@@ -3,10 +3,16 @@ class Order
 {
     private $id;
     private $user_id;
+    private $user;
     private $card_id;
+    private $card;
+    private $address_id;
+    private $address;
+    private $offer_id;
     private $created_at;
     private $order_price;
-    private $products = []; // Lista de productos asociados
+    private $order_price_total;
+    private $products = [];
 
     public function setId($id)
     {
@@ -32,6 +38,27 @@ class Order
     {
         $this->card_id = $card_id;
     }
+    
+    public function getAddress_Id()
+    {
+        return $this->address_id;
+    }
+
+    public function setAddress_Id($address_id)
+    {
+        $this->address_id = $address_id;
+    }
+
+    public function getOffer_Id()
+    {
+        return $this->offer_id;
+    }
+
+    public function setOffer_Id($offer_id)
+    {
+        $this->offer_id = $offer_id;
+    }
+
 
     public function getCard_Id()
     {
@@ -58,16 +85,50 @@ class Order
         return $this->order_price;
     }
 
-    public function addProduct($product, $quantity)
+    public function setOrder_Price_Total($order_price_total)
     {
-        $this->products[] = [
-            'product' => $product,
-            'quantity' => $quantity,
-        ];
+        $this->order_price_total = $order_price_total;
+    }
+
+    public function getOrder_Price_Total()
+    {
+        return $this->order_price_total;
+    }
+
+    public function setProducts($products)
+    {
+        $this->products = $products;
+    }
+
+    public function addProduct($product)
+    {
+        $this->products[] = $product;
     }
 
     public function getProducts()
     {
         return $this->products;
+    }
+    public function getDate(){
+        $date = new DateTime($this->created_at);
+        return $date->format('d/m/Y');
+    }
+    public function setAddress($address){
+        $this->address = $address;
+    }
+    public function getAddress(){
+        return $this->address;
+    }
+    public function setCard($card){
+        $this->card = $card;
+    }
+    public function getCard(){
+        return $this->card;
+    }
+    public function setUser($user){
+        $this->user = $user;
+    }
+    public function getUser(){
+        return $this->user;
     }
 }

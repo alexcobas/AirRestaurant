@@ -204,7 +204,7 @@ class Card
 
         $brand = $this->getCardBrand();
 
-        return $cardImages[$brand] ?? "https://upload.wikimedia.org/wikipedia/commons/6/6a/No_image_available.svg";
+        return $cardImages[$brand] ?? "default";
     }
     public function getFormattedCardNumber()
     {

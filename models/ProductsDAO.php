@@ -25,6 +25,70 @@ class ProductsDAO {
         $db->close();
         return $products;
     }
+
+    public static function getAllApi(){
+        $connection = DataBase::connect();
+        $stmt = $connection->prepare("SELECT * FROM products");
+        if (!$stmt) {
+            die("Error en la preparación de la consulta: " . mysqli_error($connection));
+        }
+        if (!$stmt->execute()) {
+            die("Error al ejecutar la consulta: " . mysqli_error($connection));
+        }
+        $result = $stmt->get_result();
+        $products = [];
+        while ($row = $result->fetch_assoc()) {
+            $product = [
+                'id' => $row['id'],
+                'name' => $row['name'],
+                'description' => $row['description'],
+                'base_price' => $row['base_price'],
+                'category' => ProductsDAO::findCategoryProductApi($row['id']),
+                'images' => ProductsDAO::findImagesProductApi($row['id']),
+                'created_at' => $row['created_at']
+            ];
+            $products[] = $product;
+        }
+        $stmt->close();
+        $connection->close();
+        return $products;
+    }
+
+    public static function getOrderProducts($orderId){
+        $db = DataBase::connect();
+        $stmt = $db->prepare("SELECT * FROM order_product WHERE order_id = ?");
+        if (!$stmt) {
+            die("Error en la preparación de la consulta de selección de pedidos: " . mysqli_error($db));
+        }
+        $stmt->bind_param("i", $orderId);
+        if (!$stmt->execute()) {
+            die("Error al ejecutar la consulta de selección de pedidos: " . mysqli_error($db));
+        }
+        $result = $stmt->get_result();
+        $products = [];
+        while ($row = $result->fetch_assoc()) {
+            $product = ProductsDAO::find($row['product_id']);
+            $cuantity = $row['quantity'];
+            $products[] = ProductsDAO::convertToProductCart($product, $cuantity);
+        }
+        $stmt->close();
+        $db->close();
+        return $products;
+    }
+    public static function convertToProductCart(Product $product, $cuantity) {
+        $productCart = new ProductCart();
+        $productCart->setId($product->getId());
+        $productCart->setName($product->getName());
+        $productCart->setDescription($product->getDescription());
+        $productCart->setBase_price($product->getBase_price());
+        $productCart->setCategory_id($product->getCategory_id());
+        $productCart->setImages($product->getImages());
+        $productCart->setCategory($product->getCategory());
+        $productCart->setCuantity($cuantity);
+        
+
+        return $productCart;
+    } 
     
 
     public static function find($id) {
@@ -100,6 +164,25 @@ class ProductsDAO {
         $db->close();
         return $images;
     }
+    public static function findImagesProductApi($id){
+        $db = DataBase::connect();
+        $query = "SELECT * FROM products_images WHERE product_id = ?";
+        $stmtImages = $db->prepare($query);
+        $stmtImages->bind_param("i", $id);
+        $stmtImages->execute();
+        $resultImages = $stmtImages->get_result();
+        $images = [];
+        while ($row = $resultImages->fetch_assoc()) {
+            $image = [
+                'id' => $row['id'],
+                'product_id' => $row['product_id'],
+                'photo_archive_name' => $row['photo_archive_name']
+            ];
+            $images[] = $image;
+        }
+        $db->close();
+        return $images;
+    }
     public static function findCategoryProduct($idCategory){
         $db = DataBase::connect();
         $query = "SELECT * FROM categories WHERE id = ?";
@@ -111,5 +194,27 @@ class ProductsDAO {
         $db->close();
         return $category;
     }
+    public static function findCategoryProductApi($idCategory){
+        $db = DataBase::connect();
+        $query = "SELECT * FROM categories WHERE id = ?";
+        $stmtCategories = $db->prepare($query);
+        $stmtCategories->bind_param("i", $idCategory); 
+        $stmtCategories->execute();
+        $resultCategories = $stmtCategories->get_result();
+        if ($row = $resultCategories->fetch_assoc()) {
+            $category = [
+                'id' => $row['id'],
+                'title' => $row['title'],
+                'name' => $row['name'],
+                'icon' => $row['icon'],
+                'img' => $row['img']
+            ];
+        } else {
+            $category = [];
+        }
+        $db->close();
+        return $category;
+    }
+    
 }
 ?>

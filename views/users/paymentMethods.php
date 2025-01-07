@@ -21,7 +21,11 @@
                     ?>
                         <div class="d-flex justify-content-between align-items-center border rounded p-3 mb-3">
                             <div class="d-flex align-items-center">
+                                <?php if ($card->getCardImage() == "default"){ ?>
+                                    <i class="bi bi-credit-card me-3"></i>
+                                <?php } else{ ?>
                                 <img src="<?= $card->getCardImage() ?>" alt="<?= $card->getCardBrand() ?>" style="width: 40px; height: auto;" class="me-3">
+                                <?php } ?>
                                 <div>
                                     <p class="mb-0 fw-bold"><?= $card->getCardBrand() ?> <?= $card->getFormattedCardNumber() ?>
                                         <?php if ($card->getIsPrimary() == 1) { ?>

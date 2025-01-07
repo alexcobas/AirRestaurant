@@ -7,8 +7,10 @@ include_once("config/dataBase.php");
 require($_SERVER['DOCUMENT_ROOT'] . "/AirRestaurant/config/init.php");
 class productController
 {
+    private $controller = "product";
     public function index()
     {
+        $controller = $this->controller;
         $products = ProductsDAO::getAll();
         $categories = CategoriesDAO::getAll();
         $header = "views/headers/header2.php";
@@ -18,6 +20,7 @@ class productController
     }
     public function show()
     {
+        $controller = $this->controller;
         if (isset($_GET['id'])) {
             $id = $_GET['id'];
             $product = ProductsDAO::find($id);
@@ -30,6 +33,7 @@ class productController
     }
     public function create()
     {
+        $controller = $this->controller;
         $ingredients = IngredientsDAO::getAll();
         $view = "views/products/create.php";
         include_once("views/main.php");

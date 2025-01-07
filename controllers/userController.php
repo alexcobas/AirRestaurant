@@ -3,12 +3,17 @@ include_once("models/User.php");
 include_once("models/UsersDAO.php");
 include_once("models/Card.php");
 include_once("models/CardsDAO.php");
+include_once("models/Order.php");
+include_once("models/OrdersDAO.php");
+include_once("models/Address.php");
+include_once("models/AddressesDAO.php");
 class userController
 {
-
+    private $controller = "user";
     public function index()
     {
         require($_SERVER['DOCUMENT_ROOT'] . "/AirRestaurant/config/protection.php");
+        $controller = $this->controller;
         $header = "views/headers/header3.php";
         $view = "views/users/index.php";
         $footer = "views/footers/footer1.php";
@@ -18,6 +23,7 @@ class userController
     public function show()
     {
         require($_SERVER['DOCUMENT_ROOT'] . "/AirRestaurant/config/protection.php");
+        $controller = $this->controller;
         $header = "views/headers/header3.php";
         $view = "views/users/show.php";
         $footer = "views/footers/footer1.php";
@@ -54,7 +60,7 @@ class userController
             echo "Error: El correo electrónico ya está en uso.";
             return;
         }
-        if($field === 'fullname'){
+        if ($field === 'fullname') {
             $name = explode(" ", $value)[0];
             $surnames = !empty(explode(" ", $value)[1]) ? explode(" ", $value)[1] : "";
             $surnames .= !empty(explode(" ", $value)[2]) ? " " . explode(" ", $value)[2] : "";
@@ -62,7 +68,7 @@ class userController
             UsersDAO::update($userId, 'surnames', $surnames);
             $_SESSION["user"]->setName($name);
             $_SESSION["user"]->setSurnames($surnames);
-        } else{
+        } else {
             UsersDAO::update($userId, $field, $value);
             $fieldCapitalized = ucfirst($field);
             $method = "set" . $fieldCapitalized;
@@ -73,7 +79,7 @@ class userController
                 throw new Exception("El método {$method} no existe en el objeto.");
             }
         }
-        
+
         header("Location: " . url . "user/personalInfo");
     }
 
@@ -81,8 +87,19 @@ class userController
     public function personalInfo()
     {
         require($_SERVER['DOCUMENT_ROOT'] . "/AirRestaurant/config/protection.php");
+        $controller = $this->controller;
         $header = "views/headers/header3.php";
         $view = "views/users/personalInfo.php";
+        $footer = "views/footers/footer1.php";
+        include_once("views/main.php");
+    }
+
+    public function loginAndSecurity()
+    {
+        require($_SERVER['DOCUMENT_ROOT'] . "/AirRestaurant/config/protection.php");
+        $controller = $this->controller;
+        $header = "views/headers/header3.php";
+        $view = "views/users/loginAndSecurity.php";
         $footer = "views/footers/footer1.php";
         include_once("views/main.php");
     }
@@ -90,9 +107,33 @@ class userController
     public function paymentMethods()
     {
         require($_SERVER['DOCUMENT_ROOT'] . "/AirRestaurant/config/protection.php");
+        $controller = $this->controller;
         $cards = CardsDAO::getUserCards($_SESSION['user']->getId());
         $header = "views/headers/header3.php";
         $view = "views/users/paymentMethods.php";
+        $footer = "views/footers/footer1.php";
+        include_once("views/main.php");
+    }
+    public function myOrders()
+    {
+        require($_SERVER['DOCUMENT_ROOT'] . "/AirRestaurant/config/protection.php");
+        $controller = $this->controller;
+        $orders = OrdersDAO::getUserOrders($_SESSION['user']->getId());
+        $header = "views/headers/header3.php";
+        $view = "views/users/myOrders.php";
+        $footer = "views/footers/footer1.php";
+        include_once("views/main.php");
+    }
+    public function orderDetails()
+    {
+        require($_SERVER['DOCUMENT_ROOT'] . "/AirRestaurant/config/protection.php");
+        $controller = $this->controller;
+        $order = OrdersDAO::find($_GET['id']);
+        $order->setProducts(ProductsDAO::getOrderProducts($_GET['id']));
+        $card  = CardsDAO::find($order->getCard_id());
+        $address = AddressesDAO::find($order->getAddress_Id());
+        $header = "views/headers/header3.php";
+        $view = "views/users/orderDetails.php";
         $footer = "views/footers/footer1.php";
         include_once("views/main.php");
     }
@@ -179,20 +220,63 @@ class userController
             exit();
         }
         $user = UsersDAO::getUserByEmail($email);
-        var_dump($user->getPassword_hash());
         if (!password_verify($password, $user->getPassword_hash())) {
             header("Location: " . url . "$controller/index?errorLogin=La contraseña es incorrecta.");
             exit();
         }
         session_start();
         $_SESSION["user"] = $user;
-        header("Location: " . url . "$controller/");
+        if (!empty($_POST["remember"])) {
+            // Configura la cookie con una duración de 30 días
+            setcookie("user_session", $user->getEmail(), time() + (30 * 24 * 60 * 60), "/", "", false, true);
+        }
+           
+        if ($user->getRole() == "admin") {
+            header("Location: " . url . "admin/");
+        } else {
+            header("Location: " . url . "$controller/");
+        }
+    }
+    public function changePassword()
+    {
+        if (empty($_POST["current-password"]) || empty($_POST["new-password"]) || empty($_POST["confirm-password"])) {
+            header("Location: " . url . "user/loginAndSecurity?errorChangePassword=Todos los campos son obligatorios.");
+            exit();
+        }
+        $currentPassword = $_POST["current-password"];
+        $newPassword = $_POST["new-password"];
+        $confirmPassword = $_POST["confirm-password"];
+        if (!password_verify($currentPassword, $_SESSION["user"]->getPassword_hash())) {
+            header("Location: " . url . "user/loginAndSecurity?errorChangePassword=La contraseña actual es incorrecta.");
+            exit();
+        }
+        if ($newPassword !== $confirmPassword) {
+            header("Location: " . url . "user/loginAndSecurity?errorChangePassword=Las contraseñas no coinciden.");
+            exit();
+        }
+        $password_hash = password_hash($newPassword, PASSWORD_DEFAULT);
+        UsersDAO::update($_SESSION["user"]->getId(), "password_hash", $password_hash);
+        $_SESSION["user"]->setPassword_hash($password_hash);
+        header("Location: " . url . "user/loginAndSecurity");
     }
 
+    public function deleteAccount()
+    {
+        UsersDAO::destroy($_SESSION["user"]->getId());
+        session_destroy();
+        header("Location: " . url . "home/");
+    }
     public function logout()
     {
         session_start();
         session_destroy();
+
+        if (!empty($_COOKIE["user_session"])) {
+            // Asegúrate de incluir los parámetros como "path" y "domain" si aplican
+            setcookie("user_session", "", time() - 3600 * 24, "/", "", false, true);
+        }
+
         header("Location: " . url . "home/");
+        exit();
     }
 }

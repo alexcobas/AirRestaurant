@@ -8,7 +8,6 @@ class Product{
     private $description;
     private $base_price;
     private $category_id;
-    private $offer_id;
     private $images;
     private $category;
 
