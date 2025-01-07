@@ -73,4 +73,17 @@ class CardsDAO {
         $db->close();
         return $card;
     }
+    public static function findApi($id) {
+        $connection = DataBase::connect();
+        $stmt = $connection->prepare("SELECT * FROM cards WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        if (!$stmt->execute()) {
+            die("Error al ejecutar la consulta: " . mysqli_error($connection));
+        }
+        $result = $stmt->get_result();
+        $card = $result->fetch_assoc();
+        $stmt->close();
+        $connection->close();
+        return $card;
+    }
 }

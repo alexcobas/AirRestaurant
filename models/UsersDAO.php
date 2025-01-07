@@ -98,6 +98,36 @@ class UsersDAO{
         $connection->close();
         return $user;
     }
+    public static function findApi($id) {
+        $connection = DataBase::connect();
+        $stmt = $connection->prepare("SELECT * FROM users WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        if (!$stmt) {
+            die("Error en la preparación de la consulta: " . mysqli_error($connection));
+        }
+        if (!$stmt->execute()) {
+            die("Error al ejecutar la consulta: " . mysqli_error($connection));
+        }
+        $result = $stmt->get_result();
+        $user = null;
+
+        if ($row = $result->fetch_assoc()) {
+            $user = [
+                'id' => $row['id'],
+                'username' => $row['username'],
+                'name' => $row['name'],
+                'surnames' => $row['surnames'],
+                'email' => $row['email'],
+                'password_hash' => $row['password_hash'],
+                'role' => $row['role'],
+                'img_profile' => $row['img_profile'],
+                'created_at' => $row['created_at']
+            ];
+        }
+        $stmt->close();
+        $connection->close();
+        return $user;
+    }
     public static function store($user) {
         $connection = DataBase::connect();
         $stmt = $connection->prepare("INSERT INTO users (username, name, surnames, email, password_hash, role) VALUES (?, ?, ?, ?, ?, ?)");

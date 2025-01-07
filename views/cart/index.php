@@ -3,12 +3,12 @@
     <div class="row">
         <div class="col-12">
             <div class="d-flex align-items-center mb-4">
-                <?php if (!isset($_GET["view"])){ ?>
+                <?php if (!isset($_GET["view"])) { ?>
                     <a href="<?= url ?>home/"><i class="bi bi-chevron-left me-3 text-black" style="font-size: 1.5rem; cursor: pointer;"></i></a>
-                <?php }else{ ?>
-                    <a href="<?= url . $_GET["view"]?>/"><i class="bi bi-chevron-left me-3 text-black" style="font-size: 1.5rem; cursor: pointer;"></i></a>
+                <?php } else { ?>
+                    <a href="<?= url . $_GET["view"] ?>/"><i class="bi bi-chevron-left me-3 text-black" style="font-size: 1.5rem; cursor: pointer;"></i></a>
                 <?php } ?>
-                
+
                 <h2 class="fw-bold mb-0">Confirmar y pagar</h2>
             </div>
         </div>
@@ -21,8 +21,8 @@
             <!-- Products -->
             <h5 class="mb-3">Tus productos</h5>
             <ul class="list-group mb-4">
-                <?php if (!empty($cart)){ ?>
-                    <?php foreach ($cart as $product){ ?>
+                <?php if (!empty($cart)) { ?>
+                    <?php foreach ($cart as $product) { ?>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <div>
                                 <h6 class="mb-1"><?= htmlspecialchars($product->getName()) ?> x <?= $product->getCuantity(); ?></h6>
@@ -34,7 +34,7 @@
                             </div>
                         </li>
                     <?php } ?>
-                <?php } else{ ?>
+                <?php } else { ?>
                     <li class="list-group-item text-center">El carrito está vacío.</li>
                 <?php } ?>
             </ul>
@@ -42,7 +42,7 @@
             <!-- Payment Form -->
             <h5 class="mb-3">Pagar con</h5>
             <form method="POST" action="<?= url ?>/cart/createOrder">
-                <?php if (!empty($cards)){ ?>
+                <?php if (!empty($cards)) { ?>
                     <!-- Tarjetas guardadas -->
                     <div class="mb-3">
                         <label for="savedCards" class="form-label">Selecciona una tarjeta guardada</label>
@@ -75,21 +75,21 @@
                 <div id="newCardForm" class="mb-3" style="display: none;">
                     <div class="mb-3">
                         <label for="cardNumber" class="form-label">Número de tarjeta</label>
-                        <input type="text" class="form-control custom-input onlyNumbers" id="cardNumber" name="cardNumber" placeholder="•••• •••• •••• ••••" maxlength="16" pattern="\d{16}">
+                        <input type="text" class="form-control custom-input onlyNumbers frTarget" id="cardNumber" name="cardNumber" placeholder="•••• •••• •••• ••••" maxlength="16" pattern="\d{16}">
                     </div>
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="caducidad" class="form-label">Caducidad</label>
-                            <input type="text" class="form-control custom-input onlyNumbers" id="caducidad" name="expiry" placeholder="MM/AA" maxlength="5" pattern="\d{2}/\d{2}">
+                            <input type="text" class="form-control custom-input onlyNumbers frTarget" id="caducidad" name="expiry" placeholder="MM/AA" maxlength="5" pattern="\d{2}/\d{2}">
                         </div>
                         <div class="col-md-6">
                             <label for="cvv" class="form-label">CVV</label>
-                            <input type="text" class="form-control custom-input onlyNumbers" id="cvv" name="cvv" placeholder="•••" maxlength="3" pattern="\d{3}">
+                            <input type="text" class="form-control custom-input onlyNumbers frTarget" id="cvv" name="cvv" placeholder="•••" maxlength="3" pattern="\d{3}">
                         </div>
                     </div>
                     <div class="mb-3 mt-3">
                         <label for="postalCode" class="form-label">Código postal</label>
-                        <input type="text" class="form-control custom-input onlyNumbers" id="postalCode" name="postalCode" placeholder="12345" maxlength="5" pattern="\d{5}">
+                        <input type="text" class="form-control custom-input onlyNumbers frTarget" id="postalCode" name="postalCode" placeholder="12345" maxlength="5" pattern="\d{5}">
                     </div>
                     <div class="mb-3">
                         <label for="country" class="form-label">País/Región</label>
@@ -147,7 +147,7 @@
                         </li>
                         <?php if ($totalOffers != null) { ?>
                             <li class="d-flex justify-content-between">
-                                <span><a href="<?= url?>cart/removePromotion" class="text-decoration-none text-gray"><i class="bi bi-trash-fill"></i></a>  Código promocional "<?= $offer->getName() ?>"</span>
+                                <span><a href="<?= url ?>cart/removePromotion" class="text-decoration-none text-gray"><i class="bi bi-trash-fill"></i></a> Código promocional "<?= $offer->getName() ?>"</span>
                                 <span><?= number_format($totalOffers - $total, 2) ?>€</span>
                             </li>
                         <?php } ?>
@@ -210,6 +210,11 @@
         enableNewCardCheckbox.addEventListener("change", function() {
             const isChecked = enableNewCardCheckbox.checked;
             newCardForm.style.display = isChecked ? "block" : "none";
+            if (newCardForm.style.display === "block") {
+                document.querySelectorAll(".frTarget").forEach(element => {
+                    element.setAttribute("required", "true");
+                });
+            }
             if (savedCardsSelect) savedCardsSelect.disabled = isChecked;
             updateButtonState();
         });

@@ -65,4 +65,17 @@ class AddressesDAO{
         $db->close();
         return $address;
     }
+    public static function findApi($id) {
+        $connection = DataBase::connect();
+        $stmt = $connection->prepare("SELECT * FROM addresses WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        if (!$stmt->execute()) {
+            die("Error al ejecutar la consulta: " . mysqli_error($connection));
+        }
+        $result = $stmt->get_result();
+        $address = $result->fetch_assoc();
+        $stmt->close();
+        $connection->close();
+        return $address;
+    }
 }

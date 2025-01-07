@@ -33,6 +33,33 @@ class OrdersDAO {
         $db->close();
         return $orders;
     }
+    public static function getAllApi() {
+        $db = DataBase::connect();
+        $stmt = $db->prepare("SELECT * FROM orders");
+        if (!$stmt) {
+            die("Error en la preparación de la consulta de selección de pedidos: " . mysqli_error($db));
+        }
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $orders = [];
+        while ($row = $result->fetch_assoc()) {
+            $order = [
+                'id' => $row['id'],
+                'user' => UsersDAO::findApi($row['user_id']),
+                'card' => CardsDAO::findApi($row['card_id']),
+                'address' => AddressesDAO::findApi($row['address_id']),
+                'order_price' => $row['order_price'],
+                'offer' => $row['offer_id'],
+                'order_price_total' => $row['order_price_total'],
+                'products' => OrdersDAO::getProductsByOrderIdApi($row['id']),
+                'created_at' => $row['created_at']
+            ];
+            $orders[] = $order;
+        }
+        $stmt->close();
+        $db->close();
+        return $orders;
+    }
     public static function store($order){
         $db = DataBase::connect();
         $stmt = $db->prepare("INSERT INTO orders (user_id, card_id, address_id, offer_id, order_price, order_price_total) VALUES (?, ?, ?, ?, ?, ?)");
@@ -113,6 +140,30 @@ class OrdersDAO {
             $product = new Product();
             $product->setId($row['product_id']);
             $product->setBase_Price($row['custom_price']);
+            $products[] = $product;
+        }
+        $stmt->close();
+        $db->close();
+        return $products;
+    }
+    public static function getProductsByOrderIdApi($orderId) {
+        $db = DataBase::connect();
+        $stmt = $db->prepare("SELECT * FROM order_product WHERE order_id = ?");
+        if (!$stmt) {
+            die("Error en la preparación de la consulta de selección de productos: " . mysqli_error($db));
+        }
+        $stmt->bind_param("i", $orderId);
+        if (!$stmt->execute()) {
+            die("Error al ejecutar la consulta de selección de productos: " . mysqli_error($db));
+        }
+        $result = $stmt->get_result();
+        $products = [];
+        while ($row = $result->fetch_assoc()) {
+            $product = [
+                'product' => ProductsDAO::findApi($row['product_id']),
+                'custom_price' => $row['custom_price'],
+                'quantity' => $row['quantity']
+            ];
             $products[] = $product;
         }
         $stmt->close();

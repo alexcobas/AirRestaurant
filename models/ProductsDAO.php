@@ -43,7 +43,7 @@ class ProductsDAO {
                 'name' => $row['name'],
                 'description' => $row['description'],
                 'base_price' => $row['base_price'],
-                'category' => ProductsDAO::findCategoryProductApi($row['id']),
+                'category' => ProductsDAO::findCategoryProductApi($row['category_id']),
                 'images' => ProductsDAO::findImagesProductApi($row['id']),
                 'created_at' => $row['created_at']
             ];
@@ -101,6 +101,19 @@ class ProductsDAO {
         $product->setImages(ProductsDAO::findImagesProduct($product->getId()));
         $product->setCategory(CategoriesDAO::find($product->getCategory_id()));
         $db->close();
+        return $product;
+    }
+    public static function findApi($id) {
+        $connection = DataBase::connect();
+        $stmt = $connection->prepare("SELECT * FROM products WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        if (!$stmt->execute()) {
+            die("Error al ejecutar la consulta: " . mysqli_error($connection));
+        }
+        $result = $stmt->get_result();
+        $product = $result->fetch_assoc();
+        $stmt->close();
+        $connection->close();
         return $product;
     }
 
