@@ -307,7 +307,7 @@
                             imageColumn = '<td>No image</td>';
                         } else {
                             // Si tiene imagen, mostrarla
-                            imageColumn = `<td><img src="${user.img_profile}" alt="Profile" style="width: 50px; height: 50px; border-radius: 50%;"></td>`;
+                            imageColumn = `<td><img src="http://localhost/AirRestaurant/img/${user.img_profile}" alt="Profile" style="width: 50px; height: 50px; border-radius: 50%;"></td>`;
                         }
                         row.innerHTML = `
                         <td>${user.id}</td>
@@ -382,7 +382,7 @@
         if (event.target && event.target.classList.contains('delete-btn')) {
             const userId = event.target.getAttribute('data-id');
             if (confirm(`¿Seguro que quieres eliminar al usuario con ID ${userId}?`)) {
-                fetch(`http://localhost/airrestaurant/api/deleteUser?id=${userId}`, {
+                fetch(`http://localhost/airrestaurant/api/api.php?modal=user&id=${userId}`, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json',
