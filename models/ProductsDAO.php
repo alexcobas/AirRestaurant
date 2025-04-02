@@ -1,8 +1,8 @@
 <?php
-include_once("models/Product.php");
-include_once("models/Images.php");
-include_once("models/CategoriesDAO.php");
-include_once("config/DataBase.php");
+include_once(__DIR__ . "/Product.php");
+include_once(__DIR__ . "/Images.php");
+include_once(__DIR__ . "/CategoriesDAO.php");
+include_once(__DIR__ . "/../config/DataBase.php");
 
 class ProductsDAO {
     

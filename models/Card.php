@@ -175,20 +175,15 @@ class Card
 
         if (preg_match("/^4/", $cardNumber)) {
             return "VISA";
-        }
-        elseif (preg_match("/^5[1-5]/", $cardNumber) || preg_match("/^2[2-7]/", $cardNumber)) {
+        } elseif (preg_match("/^5[1-5]/", $cardNumber) || preg_match("/^2[2-7]/", $cardNumber)) {
             return "MasterCard";
-        }
-        elseif (preg_match("/^3[47]/", $cardNumber)) {
+        } elseif (preg_match("/^3[47]/", $cardNumber)) {
             return "American Express";
-        }
-        elseif (preg_match("/^6/", $cardNumber)) {
+        } elseif (preg_match("/^6/", $cardNumber)) {
             return "Discover";
-        }
-        elseif (preg_match("/^35/", $cardNumber)) {
+        } elseif (preg_match("/^35/", $cardNumber)) {
             return "JCB";
-        }
-        else {
+        } else {
             return "Unknown";
         }
     }
@@ -208,8 +203,24 @@ class Card
     }
     public function getFormattedCardNumber()
     {
-        $cardNumber = $this->getCardNumber(); 
-        $lastFour = substr($cardNumber, -4); 
-        return "•••• " . $lastFour; 
+        $cardNumber = $this->getCardNumber();
+        $lastFour = substr($cardNumber, -4);
+        return "•••• " . $lastFour;
+    }
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'user_id' => $this->getUser_id(),
+            'cardNumber' => $this->getCardNumber(),
+            'cvv' => $this->getCvv(),
+            'expirationDate' => $this->getExpirationDate(),
+            'codPostal' => $this->getCodPostal(),
+            'country' => $this->getCountry(),
+            'isPrimary' => $this->getIsPrimary(),
+            'cardBrand' => $this->getCardBrand(),
+            'cardImage' => $this->getCardImage(),
+            'formattedCardNumber' => $this->getFormattedCardNumber()
+        ];
     }
 }

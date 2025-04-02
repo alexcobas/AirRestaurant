@@ -1,6 +1,6 @@
 <?php
-include_once("models/Categories.php");
-include_once("config/DataBase.php");
+include_once(__DIR__ . "/Categories.php");
+include_once(__DIR__ . "/../config/DataBase.php");
 class CategoriesDAO {
 
     public static function getAll() {

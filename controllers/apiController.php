@@ -1,124 +1,205 @@
 <?php
-include_once("models/User.php");
-include_once("models/UsersDAO.php");
-include_once("models/Card.php");
-include_once("models/Order.php");
-include_once("models/OrdersDAO.php");
-include_once("models/Address.php");
+
+include_once __DIR__ . '/../models/User.php';
+include_once __DIR__ . '/../models/UsersDAO.php';
+include_once __DIR__ . '/../models/Product.php';
+include_once __DIR__ . '/../models/ProductsDAO.php';
+include_once __DIR__ . '/../models/Order.php';
+include_once __DIR__ . '/../models/OrdersDAO.php';
 
 class apiController
 {
-    public function createUser()
+    // Métodos para los usuarios
+    public static function getUsers()
     {
-        try {
-            // Validación de parámetros
-            if (!isset($_POST["username"]) || !isset($_POST["name"]) || !isset($_POST["surnames"]) || !isset($_POST["email"]) || !isset($_POST["password_hash"]) || !isset($_POST["role"])) {
-                throw new Exception('Faltan parámetros necesarios para crear el usuario.');
-            }
-
-            // Verificamos si el correo electrónico ya existe
-            if (UsersDAO::emailExists($_POST["email"]) != null) {
-                throw new Exception('El correo electrónico ya está registrado.');
-            }
-
-            // Verificamos si el nombre de usuario ya existe
-            if (UsersDAO::usernameExists($_POST["username"]) != null) {
-                throw new Exception('El nombre de usuario ya está registrado.');
-            }
-
-            // Creamos un nuevo objeto User
-            $user = new User();
-            $user->setUsername($_POST["username"]);
-            $user->setName($_POST["name"]);
-            $user->setSurnames($_POST["surnames"]);
-            $user->setEmail($_POST["email"]);
-            $user->setPassword_hash($_POST["password_hash"]);
-            $user->setRole($_POST["role"]);
-
-            // Almacenamos el usuario en la base de datos
-            if (!UsersDAO::store($user)) {
-                throw new Exception('Error al guardar el usuario en la base de datos.');
-            }
-
-            // Si todo ha salido bien
-            echo json_encode([
-                'status' => 'success',
-                'message' => 'Usuario creado correctamente.'
-            ]);
-        } catch (Exception $e) {
-            // Capturamos y mostramos el error
-            echo json_encode([
-                'status' => 'error',
-                'message' => $e->getMessage()  // Mensaje detallado del error
-            ]);
-        }
+        $users = UsersDAO::getAllApi();
+        return $users;
     }
 
-
-    public function getUsers()
+    public static function getUser($id)
     {
-        $users = usersDAO::getAllApi();
-        if ($users) {
-            // Respuesta JSON con los datos preparados
-            echo json_encode([
-                'status' => 'success',
-                'data' => $users
-            ]);
-        } else {
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'No se encontraron usuarios.'
-            ]);
+        $user = UsersDAO::find($id);
+        if ($user) {
+            return $user->toArray();
         }
-    }
-    public function deleteUser()
-    {
-        $id = $_GET['id'];
-        $users = usersDAO::destroy($id);
-        if ($users) {
-            // Respuesta JSON con los datos preparados
-            echo json_encode([
-                'status' => 'success',
-                'data' => $users
-            ]);
-        } else {
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'No se encontraron usuarios.'
-            ]);
-        }
+        return $user;
     }
 
-    public function getProducts()
+    public static function createUser($data)
     {
-        $users = productsDAO::getAllApi();
-        if ($users) {
-            // Respuesta JSON con los datos preparados
-            echo json_encode([
-                'status' => 'success',
-                'data' => $users
-            ]);
-        } else {
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'No se encontraron usuarios.'
-            ]);
+        if (
+            empty($data['username']) ||
+            empty($data['name']) ||
+            empty($data['surnames']) ||
+            empty($data['email']) ||
+            empty($data['password']) ||
+            empty($data['role'])
+        ) {
+            return false;
         }
+
+        $user = new User();
+        $user->setUsername($data['username']);
+        $user->setName($data['name']);
+        $user->setSurnames($data['surnames']);
+        $user->setEmail($data['email']);
+        $user->setPassword_hash(password_hash($data['password'], PASSWORD_BCRYPT));
+        $user->setRole($data['role']);
+        $user->setImg_profile($data['img_profile'] ?? null);
+
+        $result = UsersDAO::store($user);
+
+        if ($result) {
+            return $user->toArray();
+        }
+
+        return false;
     }
-    public function getOrders()
+
+    public static function updateUser($id, $data)
     {
-        $users = ordersDAO::getAllApi();
-        if ($users) {
-            // Respuesta JSON con los datos preparados
-            echo json_encode([
-                'status' => 'success',
-                'data' => $users
-            ]);
-        } else {
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'No se encontraron pedidos.'
-            ]);
+        if ($id && $data) {
+            return UsersDAO::updateAll($id, $data);
         }
+        return false;
+    }
+
+    public static function deleteUser($id)
+    {
+        $user = null;
+        if ($id) {
+            $user = UsersDAO::destroy($id);
+        }
+
+        return $user;
+    }
+
+    // Métodos para los productos
+    public static function getProducts()
+    {
+        $products = ProductsDAO::getAllApi();
+        return $products;
+    }
+
+    public static function getProduct($id)
+    {
+        $product = ProductsDAO::find($id);
+        if ($product) {
+            return $product->toArray();
+        }
+        return $product;
+    }
+
+    // public static function createProduct($data)
+    // {
+    //     if (
+    //         empty($data['name']) ||
+    //         empty($data['description']) ||
+    //         empty($data['price']) ||
+    //         empty($data['stock'])
+    //     ) {
+    //         return false;
+    //     }
+
+    //     $product = new Product();
+    //     $product->setName($data['name']);
+    //     $product->setDescription($data['description']);
+    //     $product->setPrice($data['price']);
+    //     $product->setStock($data['stock']);
+    //     $product->setImg($data['img'] ?? null);
+
+    //     $result = ProductsDAO::store($product);
+
+    //     if ($result) {
+    //         return $product->toArray();
+    //     }
+
+    //     return false;
+    // }
+
+    public static function updateProduct($id, $data)
+    {
+        if ($id && $data) {
+            return ProductsDAO::updateAll($id, $data);
+        }
+        return false;
+    }
+
+    public static function deleteProduct($id)
+    {
+        $product = null;
+        if ($id) {
+            $product = ProductsDAO::destroy($id);
+        }
+
+        return $product;
+    }
+
+    // Métodos para los pedidos
+    public static function getOrders()
+{
+    $orders = OrdersDAO::getAll(); // Esto devuelve un array de objetos Order
+    $ordersArray = [];
+
+    // Convertir cada objeto Order a un array
+    foreach ($orders as $order) {
+        $ordersArray[] = $order->toArray(); // Llamamos a toArray() para convertir el objeto a un array
+    }
+
+    return $ordersArray;
+}
+
+
+    public static function getOrder($id)
+    {
+        $order = OrdersDAO::find($id);
+        if ($order) {
+            return $order->toArray();
+        }
+        return $order;
+    }
+
+    // public static function createOrder($data)
+    // {
+    //     if (
+    //         empty($data['user_id']) ||
+    //         empty($data['product_ids']) ||
+    //         empty($data['total'])
+    //     ) {
+    //         return false;
+    //     }
+
+    //     $order = new Order();
+    //     $order->setUserId($data['user_id']);
+    //     $order->setProductIds($data['product_ids']);
+    //     $order->setTotal($data['total']);
+    //     $order->setStatus($data['status'] ?? 'pending');
+
+    //     $result = OrdersDAO::store($order);
+
+    //     if ($result) {
+    //         return $order->toArray();
+    //     }
+
+    //     return false;
+    // }
+
+    public static function updateOrder($id, $data)
+    {
+        if ($id && $data) {
+            return OrdersDAO::updateAll($id, $data);
+        }
+        return false;
+    }
+
+    public static function deleteOrder($id)
+    {
+        $order = null;
+        if ($id) {
+            $order = OrdersDAO::destroy($id);
+        }
+
+        return $order;
     }
 }
+?>

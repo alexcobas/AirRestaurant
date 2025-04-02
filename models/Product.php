@@ -1,5 +1,6 @@
 <?php
-class Product{
+class Product
+{
 
     const TYPE_HAMBURGUESA = 1;
     const TYPE_BOCATA = 2;
@@ -22,7 +23,7 @@ class Product{
 
         return $this;
     }
-    
+
     /*public function __construct($name, $description, $base_price)
     {
         $this->name = $name;
@@ -53,7 +54,7 @@ class Product{
 
         return $this;
     }
-    
+
     public function getDescription()
     {
         return $this->description;
@@ -69,7 +70,7 @@ class Product{
 
     /**
      * Get the value of images
-     */ 
+     */
     public function getImages()
     {
         return $this->images;
@@ -79,7 +80,7 @@ class Product{
      * Set the value of images
      *
      * @return  self
-     */ 
+     */
     public function setImages($images)
     {
         $this->images = $images;
@@ -89,7 +90,7 @@ class Product{
 
     /**
      * Get the value of category
-     */ 
+     */
     public function getCategory()
     {
         return $this->category;
@@ -99,7 +100,7 @@ class Product{
      * Set the value of category
      *
      * @return  self
-     */ 
+     */
     public function setCategory($category)
     {
         $this->category = $category;
@@ -109,7 +110,7 @@ class Product{
 
     /**
      * Get the value of category_id
-     */ 
+     */
     public function getCategory_id()
     {
         return $this->category_id;
@@ -119,11 +120,23 @@ class Product{
      * Set the value of category_id
      *
      * @return  self
-     */ 
+     */
     public function setCategory_id($category_id)
     {
         $this->category_id = $category_id;
 
         return $this;
+    }
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'base_price' => $this->getBase_price(),
+            'category_id' => $this->getCategory_id(),
+            'images' => $this->getImages(), // Asegúrate de que las imágenes sean un array o serializables
+            'category' => $this->getCategory() // Asegúrate de que la categoría sea un array o tenga un método toArray
+        ];
     }
 }

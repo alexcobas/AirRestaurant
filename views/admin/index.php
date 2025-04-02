@@ -37,6 +37,7 @@
     <!-- Contenedor de Usuarios -->
     <div id="user-list" style="display:none; margin-top: 20px;">
         <h2>Lista de Usuarios</h2>
+        <button>Create User</button>
         <table id="users-table" class="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -283,7 +284,7 @@
 
     // Fetch Usuarios
     function fetchUsers() {
-        fetch('http://localhost/airrestaurant/api/getUsers', {
+        fetch('http://localhost/airrestaurant/api/api.php?modal=user', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -292,26 +293,36 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.status === 'success') {
+                console.log(data);
+                if (data.status === 'Success') {
                     const usersTable = document.getElementById('users-table').querySelector('tbody');
                     usersTable.innerHTML = ''; // Limpiar filas
 
                     data.data.forEach(user => {
                         const row = document.createElement('tr');
+                        let imageColumn = ''; // Variable para la columna de la imagen
+
+                        // Si el usuario no tiene imagen de perfil, mostrar "No image"
+                        if (user.img_profile == null) {
+                            imageColumn = '<td>No image</td>';
+                        } else {
+                            // Si tiene imagen, mostrarla
+                            imageColumn = `<td><img src="${user.img_profile}" alt="Profile" style="width: 50px; height: 50px; border-radius: 50%;"></td>`;
+                        }
                         row.innerHTML = `
-                    <td>${user.id}</td>
-                    <td>${user.name}</td>
-                    <td>${user.surnames}</td>
-                    <td>${user.username}</td>
-                    <td>${user.email}</td>
-                    <td>${user.role}</td>
-                    <td>${user.created_at}</td>
-                    <td><img src="${user.img_profile}" alt="Profile" style="width: 50px; height: 50px; border-radius: 50%;"></td>
-                    <td class="actionColumnUser">
-                        <button class="delete-btn btn btn-danger" style="display:none;" data-id="${user.id}">Eliminar</button>
-                        <button class="edit-btn btn btn-warning" style="display:none;" data-id="${user.id}">Editar</button>
-                    </td>
-                `;
+                        <td>${user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.surnames}</td>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td>${user.role}</td>
+                        <td>${user.created_at}</td>
+                        ${imageColumn}
+                        <td class="actionColumnUser">
+                            <button class="delete-btn btn btn-danger" style="display:none;" data-id="${user.id}">Eliminar</button>
+                            <button class="edit-btn btn btn-warning" style="display:none;" data-id="${user.id}">Editar</button>
+                        </td>
+                    `;
                         usersTable.appendChild(row);
                     });
                     document.getElementById('user-list').style.display = 'block';

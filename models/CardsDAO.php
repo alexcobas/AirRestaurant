@@ -1,6 +1,6 @@
 <?php
-include_once("models/Card.php");
-include_once("config/DataBase.php");
+include_once(__DIR__ . "/Card.php");
+include_once(__DIR__ . "/../config/DataBase.php");
 class CardsDAO {
 
     public static function getAll() {

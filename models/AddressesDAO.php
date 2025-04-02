@@ -1,5 +1,6 @@
 <?php
-include_once("config/DataBase.php");
+include_once(__DIR__ . "/Address.php");
+include_once(__DIR__ ."/../config/DataBase.php");
 class AddressesDAO{
     public static function getAllFromUser($user_id){
         $db = DataBase::connect();

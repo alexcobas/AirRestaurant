@@ -1,7 +1,8 @@
 <?php
-include_once("config/DataBase.php");
-include_once("models/Offer.php");
-include_once("models/Order.php");
+include_once(__DIR__ . "/../config/DataBase.php");
+include_once(__DIR__ . "/Offer.php");
+include_once(__DIR__ . "/Order.php");
+include_once(__DIR__ . "/ProductCart.php");
 class OrdersDAO {
     public static function getAll() {
         $db = DataBase::connect();

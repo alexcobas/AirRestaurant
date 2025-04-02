@@ -1,5 +1,6 @@
 <?php
-class User{
+class User
+{
     private $id;
     private $username;
     private $name;
@@ -15,13 +16,14 @@ class User{
     private $accountAge;
     private $accountAgeUnitLabel;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->calcularTiempoCuenta();
     }
 
     /**
      * Get the value of id
-     */ 
+     */
     public function getId()
     {
         return $this->id;
@@ -31,7 +33,7 @@ class User{
      * Set the value of id
      *
      * @return  self
-     */ 
+     */
     public function setId($id)
     {
         $this->id = $id;
@@ -41,7 +43,7 @@ class User{
 
     /**
      * Get the value of username
-     */ 
+     */
     public function getUsername()
     {
         return $this->username;
@@ -51,7 +53,7 @@ class User{
      * Set the value of username
      *
      * @return  self
-     */ 
+     */
     public function setUsername($username)
     {
         $this->username = $username;
@@ -61,7 +63,7 @@ class User{
 
     /**
      * Get the value of name
-     */ 
+     */
     public function getName()
     {
         return $this->name;
@@ -71,7 +73,7 @@ class User{
      * Set the value of name
      *
      * @return  self
-     */ 
+     */
     public function setName($name)
     {
         $this->name = $name;
@@ -81,7 +83,7 @@ class User{
 
     /**
      * Get the value of surnames
-     */ 
+     */
     public function getSurnames()
     {
         return $this->surnames;
@@ -91,7 +93,7 @@ class User{
      * Set the value of surnames
      *
      * @return  self
-     */ 
+     */
     public function setSurnames($surnames)
     {
         $this->surnames = $surnames;
@@ -101,7 +103,7 @@ class User{
 
     /**
      * Get the value of email
-     */ 
+     */
     public function getEmail()
     {
         return $this->email;
@@ -111,7 +113,7 @@ class User{
      * Set the value of email
      *
      * @return  self
-     */ 
+     */
     public function setEmail($email)
     {
         $this->email = $email;
@@ -121,7 +123,7 @@ class User{
 
     /**
      * Get the value of pasword_hash
-     */ 
+     */
     public function getPassword_hash()
     {
         return $this->password_hash;
@@ -131,7 +133,7 @@ class User{
      * Set the value of pasword_hash
      *
      * @return  self
-     */ 
+     */
     public function setPassword_hash($password_hash)
     {
         $this->password_hash = $password_hash;
@@ -140,7 +142,7 @@ class User{
     }
     /**
      * Get the value of role
-     */ 
+     */
     public function getRole()
     {
         return $this->role;
@@ -150,7 +152,7 @@ class User{
      * Set the value of role
      *
      * @return  self
-     */ 
+     */
     public function setRole($role)
     {
         $this->role = $role;
@@ -160,7 +162,7 @@ class User{
 
     /**
      * Get the value of img_profile
-     */ 
+     */
     public function getImg_profile()
     {
         return $this->img_profile;
@@ -170,25 +172,29 @@ class User{
      * Set the value of img_profile
      *
      * @return  self
-     */ 
+     */
     public function setImg_profile($img_profile)
     {
         $this->img_profile = $img_profile;
 
         return $this;
     }
-    public function setCards($cards){
+    public function setCards($cards)
+    {
         $this->cards = $cards;
 
         return $this;
     }
-    public function getCards() {
+    public function getCards()
+    {
         return $this->cards;
     }
-    public function addCard($card) {
+    public function addCard($card)
+    {
         $this->cards[] = $card;
     }
-    public function deleteCard($cardId) {
+    public function deleteCard($cardId)
+    {
         foreach ($this->cards as $key => $card) {
             if ($card->getId() == $cardId) {
                 unset($this->cards[$key]);
@@ -196,20 +202,24 @@ class User{
             }
         }
     }
-    public function setAddresses($addresses){
+    public function setAddresses($addresses)
+    {
         $this->addresses = $addresses;
 
         return $this;
     }
-    public function getAddresses() {
+    public function getAddresses()
+    {
         return $this->addresses;
     }
-    public function setOrders($orders){
+    public function setOrders($orders)
+    {
         $this->orders = $orders;
 
         return $this;
     }
-    public function getOrders() {
+    public function getOrders()
+    {
         return $this->orders;
     }
     /**
@@ -270,7 +280,8 @@ class User{
         return $this;
     }
 
-    public function calcularTiempoCuenta() {
+    public function calcularTiempoCuenta()
+    {
         $fechaCreacion = new DateTime($this->created_at);
         $fechaActual = new DateTime();
         $intervalo = $fechaCreacion->diff($fechaActual);
@@ -280,21 +291,46 @@ class User{
         } else {
             $this->accountAge = $intervalo->m == 0 ? 1 : $intervalo->m;
             $this->accountAgeUnitLabel = $intervalo->m > 1 ? 'meses' : 'mes';
-        } 
+        }
     }
     public function getFormattedEmail()
     {
-        $email = $this->getEmail(); 
+        $email = $this->getEmail();
         $firstChar = substr($email, 0, 1);
         $emailParts = explode('@', $email);
-        return $firstChar . "***@" . $emailParts[1]; 
+        return $firstChar . "***@" . $emailParts[1];
     }
-    public function getPrimaryCard() {
+    public function getPrimaryCard()
+    {
         foreach ($this->cards as $card) {
             if ($card->getIsPrimary()) {
                 return $card;
             }
         }
         return null;
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'username' => $this->username,
+            'name' => $this->name,
+            'surnames' => $this->surnames,
+            'email' => $this->email,
+            'password_hash' => $this->password_hash,
+            'role' => $this->role,
+            'img_profile' => $this->img_profile,
+            'cards' => array_map(function ($card) {
+                return $card->toArray(); // Asegúrate de que la clase `Card` también tenga un método `toArray`
+            }, $this->cards ?? []),
+            'addresses' => array_map(function ($address) {
+                return $address->toArray(); // Asegúrate de que la clase `Address` también tenga un método `toArray`
+            }, $this->addresses ?? []),
+            'orders' => array_map(function ($order) {
+                return $order->toArray(); // Asegúrate de que la clase `Order` también tenga un método `toArray`
+            }, $this->orders ?? []),
+            'created_at' => $this->created_at
+        ];
     }
 }
