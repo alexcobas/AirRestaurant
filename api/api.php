@@ -101,13 +101,13 @@ switch ($metodo) {
                     }
                     break;
                 case 'product':
-                    // $result = apiController::createProduct($data);
+                    $result = apiController::createProduct($data);
                     if ($result) {
                         http_response_code(201);
                         echo json_encode(['status' => 'Success', 'mensaje' => 'Producto creado correctamente.', 'data' => $result]);
                     } else {
                         http_response_code(500);
-                        echo json_encode(['status' => 'Error', 'mensaje' => 'No se pudo crear el producto.']);
+                        echo json_encode(['status' => 'Error', 'mensaje' => 'No se pudo crear el producto.', 'data' => $data]);
                     }
                     break;
                 case 'order':

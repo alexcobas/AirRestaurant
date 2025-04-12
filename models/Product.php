@@ -88,6 +88,15 @@ class Product
         return $this;
     }
 
+    public function addImage($image)
+    {
+        if (is_array($this->images)) {
+            $this->images[] = $image;
+        } else {
+            $this->images = [$image];
+        }
+    }
+
     /**
      * Get the value of category
      */

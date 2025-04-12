@@ -90,32 +90,31 @@ class apiController
         return $product;
     }
 
-    // public static function createProduct($data)
-    // {
-    //     if (
-    //         empty($data['name']) ||
-    //         empty($data['description']) ||
-    //         empty($data['price']) ||
-    //         empty($data['stock'])
-    //     ) {
-    //         return false;
-    //     }
+    public static function createProduct($data)
+    {
+        if (
+            empty($data['name']) ||
+            empty($data['description']) ||
+            empty($data['base_price']) ||
+            empty($data['img'])
+        ) {
+            return false;
+        }
 
-    //     $product = new Product();
-    //     $product->setName($data['name']);
-    //     $product->setDescription($data['description']);
-    //     $product->setPrice($data['price']);
-    //     $product->setStock($data['stock']);
-    //     $product->setImg($data['img'] ?? null);
+        $product = new Product();
+        $product->setName($data['name']);
+        $product->setDescription($data['description']);
+        $product->setBase_price($data['base_price']);
+        $product->addImage($data['img'] ?? null);
 
-    //     $result = ProductsDAO::store($product);
+        $result = ProductsDAO::store($product);
 
-    //     if ($result) {
-    //         return $product->toArray();
-    //     }
+        if ($result) {
+            return $product->toArray();
+        }
 
-    //     return false;
-    // }
+        return $product;
+    }
 
     public static function updateProduct($id, $data)
     {

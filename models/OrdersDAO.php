@@ -27,7 +27,7 @@ class OrdersDAO {
             $order->setOrder_Price($row['order_price']);
             $order->setOrder_Price_Total($row['order_price_total']);
             $order->setOffer_Id($row['offer_id']);
-            $order->setProducts(self::getProductsByOrderId($row['id']));
+            $order->setProducts(OrdersDao::getProductsByOrderId($row['id']));
             $orders[] = $order;
         }
         $stmt->close();
@@ -118,13 +118,38 @@ class OrdersDAO {
             $order->setUser_Id($row['user_id']);
             $order->setCard_Id($row['card_id']);
             $order->setOrder_Price($row['order_price']);
-            $order->setProducts(self::getProductsByOrderId($row['id']));
+            $order->setProducts(self::getProductsOfOrder($row['id']));
             $orders[] = $order;
         }
         $stmt->close();
         $db->close();
         return $orders;
     }
+
+    public static function getProductsOfOrder($orderId) {
+        $db = DataBase::connect();
+        $stmt = $db->prepare("SELECT * FROM order_product WHERE order_id = ?");
+        if (!$stmt) {
+            die("Error en la preparación de la consulta de selección de productos: " . mysqli_error($db));
+        }
+        $stmt->bind_param("i", $orderId);
+        if (!$stmt->execute()) {
+            die("Error al ejecutar la consulta de selección de productos: " . mysqli_error($db));
+        }
+        $result = $stmt->get_result();
+        $products = [];
+        while ($row = $result->fetch_assoc()) {
+            $product = new ProductCart();
+            $product->setId($row['product_id']);
+            $product->setBase_Price($row['custom_price']);
+            $product->setCuantity($row['quantity']);
+            $products[] = $product;
+        }
+        $stmt->close();
+        $db->close();
+        return $products;
+    }
+
     public static function getProductsByOrderId($orderId) {
         $db = DataBase::connect();
         $stmt = $db->prepare("SELECT * FROM order_product WHERE order_id = ?");
@@ -225,5 +250,19 @@ class OrdersDAO {
         $stmt->close();
         $db->close();
         return $orders;
+    }
+    public static function destroy($id) {
+        $db = DataBase::connect();
+        $stmt = $db->prepare("DELETE FROM orders WHERE id = ?");
+        if (!$stmt) {
+            die("Error en la preparación de la consulta de eliminación de pedido: " . mysqli_error($db));
+        }
+        $stmt->bind_param("i", $id);
+        if (!$stmt->execute()) {
+            die("Error al ejecutar la consulta de eliminación de pedido: " . mysqli_error($db));
+        }
+        $stmt->close();
+        $db->close();
+        return true;
     }
 }

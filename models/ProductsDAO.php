@@ -117,7 +117,7 @@ class ProductsDAO {
         return $product;
     }
 
-    public static function store($producto, $ingredientes) {
+    public static function storeWithIngredients($producto, $ingredientes) {
         $connection = DataBase::connect();
         $stmt = $connection->prepare("INSERT INTO products (name, description, base_price) VALUES (?, ?, ?)");
         
@@ -152,6 +152,40 @@ class ProductsDAO {
         $connection->close();
     }
     
+    public static function store($product){
+        $db = DataBase::connect();
+        $stmt = $db->prepare("INSERT INTO products (name, description, base_price, category_id) VALUES (?, ?, ?, ?)");
+        if (!$stmt) {
+            die("Error en la preparación de la consulta de inserción: " . mysqli_error($db));
+        }
+        $name = $product->getName();
+        $description = $product->getDescription();
+        $base_price = $product->getBase_price();
+        $category_id = $product->getCategory_id();
+        $stmt->bind_param("ssdi", $name, $description, $base_price, $category_id);
+        if (!$stmt->execute()) {
+            die("Error al ejecutar la consulta de inserción: " . mysqli_error($db));
+        }
+        $productId = $db->insert_id;
+        $stmt->close();
+        $db->close();
+        ProductsDAO::storeImage($productId, $product->getImages()[0]);
+        return $productId;
+    }
+
+    public static function storeImage($productId, $imageName) {
+        $db = DataBase::connect();
+        $stmt = $db->prepare("INSERT INTO products_images (product_id, photo_archive_name) VALUES (?, ?)");
+        if (!$stmt) {
+            die("Error en la preparación de la consulta de inserción de imagen: " . mysqli_error($db));
+        }
+        $stmt->bind_param("is", $productId, $imageName);
+        if (!$stmt->execute()) {
+            die("Error al ejecutar la consulta de inserción de imagen: " . mysqli_error($db));
+        }
+        $stmt->close();
+        return true;
+    }
     
     
 
@@ -159,8 +193,13 @@ class ProductsDAO {
         $db = DataBase::connect();
         $stmt = $db->prepare("DELETE FROM products WHERE id = ?");
         $stmt->bind_param("i", $id);
-        $stmt->execute();
+        if (!$stmt->execute()) {
+            die("Error al ejecutar la consulta de eliminación: " . mysqli_error($db));
+        }
         $stmt->close();
+        $db->close();
+        return true;
+        
     }
 
     public static function findImagesProduct($id){
@@ -227,6 +266,37 @@ class ProductsDAO {
         }
         $db->close();
         return $category;
+    }
+
+    public static function updateAll($id, $data) {
+        $db = DataBase::connect();
+        $stmt = $db->prepare("UPDATE products SET name = ?, description = ?, base_price = ? WHERE id = ?");
+        if (!$stmt) {
+            die("Error en la preparación de la consulta de actualización: " . mysqli_error($db));
+        }
+        $name = $data['name'];
+        $description = $data['description'];
+        $base_price = $data['base_price'];
+        $stmt->bind_param("ssdi", $name, $description, $base_price, $id);
+        if (!$stmt->execute()) {
+            die("Error al ejecutar la consulta de actualización: " . mysqli_error($db));
+        }
+        $stmt->close();
+        ProductsDAO::updateImage($data['imageId'], $data['img']);
+        return true;
+    }
+    public static function updateImage($id, $imageName) {
+        $db = DataBase::connect();
+        $stmt = $db->prepare("UPDATE products_images SET photo_archive_name = ? WHERE id = ?");
+        if (!$stmt) {
+            die("Error en la preparación de la consulta de actualización de imagen: " . mysqli_error($db));
+        }
+        $stmt->bind_param("si", $imageName, $id);
+        if (!$stmt->execute()) {
+            die("Error al ejecutar la consulta de actualización de imagen: " . mysqli_error($db));
+        }
+        $stmt->close();
+        return true;
     }
     
 }
