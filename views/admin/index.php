@@ -151,8 +151,10 @@
               <th>ID</th>
               <th>ID Usuario</th>
               <th>ID Productos</th>
+              <th>Precio</th>
               <th>Total</th>
-              <th>Estatus</th>
+              <th>Categoria</th>
+              <th>Creado</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -574,8 +576,10 @@
                 <td>${order.id}</td>
                 <td>${order.user_id}</td>
                 <td>${order.product_ids}</td>
-                <td>${order.total}</td>
-                <td>${order.status}</td>
+                <td>${order.order_price}</td>
+                <td>${order.order_price_total}</td>
+                <td>${order.offer_id}</td>
+                <td>${order.created_at || ''}</td>
                 <td>
                   <button class="btn btn-warning btn-sm" onclick='editOrder(${JSON.stringify(order)})'>Editar</button>
                   <button class="btn btn-danger btn-sm" onclick="deleteOrder(${order.id})">Eliminar</button>
