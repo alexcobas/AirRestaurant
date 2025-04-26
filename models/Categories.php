@@ -106,5 +106,16 @@ class Categories{
 
         return $this;
     }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'name' => $this->getName(),
+            'icon' => $this->getIcon(),
+            'img' => $this->getImg()
+        ];
+    }
 }
 ?>

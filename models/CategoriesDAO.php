@@ -21,6 +21,24 @@ class CategoriesDAO {
         return $categories;
     }
 
+    public static function getAllApi() {
+        $db = DataBase::connect();
+        $stmtCategories = $db->prepare("SELECT * FROM categories");
+        if (!$stmtCategories) {
+            die("Error en la preparación de la consulta: " . mysqli_error($db)); 
+        }
+        $stmtCategories->execute();
+        $resultCategories = $stmtCategories->get_result();
+    
+        $categories = [];
+        while ($category = $resultCategories->fetch_object('Categories')) {
+            $categories[] = $category->toArray(); // Convertir a array
+        }
+    
+        $db->close();
+        return $categories;
+    }
+
     public static function find($id) {
         $db = DataBase::connect();
         $stmtCategory = $db->prepare("SELECT * FROM categories WHERE id = ?");

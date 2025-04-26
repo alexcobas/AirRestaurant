@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,67 +12,86 @@
       color: #000;
       font-family: 'Helvetica Neue', sans-serif;
     }
+
     .container {
       margin-top: 30px;
     }
+
     h1 {
       color: #ff5a5f;
       font-weight: 700;
       text-align: center;
       margin-bottom: 20px;
     }
+
     .section {
       margin-top: 20px;
     }
+
     table {
       border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
+
     th {
       background-color: #ff5a5f;
       color: white;
     }
+
     tr:nth-child(even) {
       background-color: #f9f9f9;
     }
-    td, th {
+
+    td,
+    th {
       vertical-align: middle;
     }
+
     .btn-warning {
       background-color: #ffc2c5;
       color: #000;
       border: none;
     }
-    .btn-danger, .btn-primary {
+
+    .btn-danger,
+    .btn-primary {
       border: none;
     }
+
     .btn-primary {
       background-color: #ff5a5f;
     }
+
     .btn:hover {
       opacity: 0.85;
     }
+
     img {
       object-fit: cover;
     }
+
     .modal-header {
       background-color: #ff5a5f;
       color: #fff;
     }
+
     .form-label {
       font-weight: bold;
     }
+
     /* Estilo para la navegación de secciones */
     .nav-section {
       margin-bottom: 20px;
       text-align: center;
     }
+
     .nav-section button {
       margin: 0 5px;
     }
   </style>
 </head>
+
 <body>
   <!-- Navegación entre secciones -->
   <div class="container">
@@ -126,6 +146,7 @@
               <th>Nombre</th>
               <th>Descripción</th>
               <th>Precio</th>
+              <th>Categoria</th>
               <th>Imagen</th>
               <th>Acciones</th>
             </tr>
@@ -240,6 +261,11 @@
             <input type="text" class="form-control" id="productDescription" name="productDescription" required>
           </div>
           <div class="mb-3">
+            <label for="productCategory" class="form-label">Categoría</label>
+            <select class="form-control" id="productCategory" name="productCategory" required>
+            </select>
+          </div>
+          <div class="mb-3">
             <label for="productPrice" class="form-label">Precio</label>
             <input type="number" step="0.01" class="form-control" id="productPrice" name="productPrice" required>
           </div>
@@ -267,12 +293,12 @@
         <div class="modal-body">
           <input type="hidden" id="orderId">
           <div class="mb-3">
-            <label for="orderUserId" class="form-label">ID Usuario</label>
-            <input type="number" class="form-control" id="orderUserId" name="orderUserId" required>
+            <label for="orderUserId" class="form-label">Usuario</label>
+            <select class="form-control" id="orderUserId" name="orderUserId" required></select>
           </div>
           <div class="mb-3">
-            <label for="orderProductIds" class="form-label">IDs Productos (separados por coma)</label>
-            <input type="text" class="form-control" id="orderProductIds" name="orderProductIds" required>
+            <label for="orderProductIds" class="form-label">Productos</label>
+            <select class="form-control" id="orderProductIds" name="orderProductIds" multiple required></select>
           </div>
           <div class="mb-3">
             <label for="orderTotal" class="form-label">Total</label>
@@ -399,9 +425,9 @@
     function saveUser(e) {
       e.preventDefault();
       const id = document.getElementById('userId').value;
-      const url = id
-        ? `http://localhost/airrestaurant/api/api.php?modal=user&id=${id}`
-        : 'http://localhost/airrestaurant/api/api.php?modal=user';
+      const url = id ?
+        `http://localhost/airrestaurant/api/api.php?modal=user&id=${id}` :
+        'http://localhost/airrestaurant/api/api.php?modal=user';
       const method = id ? 'PUT' : 'POST';
       const body = {
         id,
@@ -423,26 +449,28 @@
         body.password = password;
       }
       fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.status === 'Success') {
-          userModalInstance.hide();
-          fetchUsers();
-        } else {
-          alert('Ocurrió un error al guardar el usuario.');
-        }
-      });
+          method,
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'Success') {
+            userModalInstance.hide();
+            fetchUsers();
+          } else {
+            alert('Ocurrió un error al guardar el usuario.');
+          }
+        });
     }
 
     function deleteUser(id) {
       if (confirm('¿Estás seguro de eliminar este usuario?')) {
-        fetch(`http://localhost/airrestaurant/api/api.php?modal=user&id=${id}`, { method: 'DELETE' })
+        fetch(`http://localhost/airrestaurant/api/api.php?modal=user&id=${id}`, {
+            method: 'DELETE'
+          })
           .then(res => res.json())
           .then(data => {
             if (data.status === 'Success') fetchUsers();
@@ -463,21 +491,24 @@
           if (data.status === 'Success') {
             data.data.forEach(product => {
               const row = document.createElement('tr');
-              // Suponiendo que product.img es la ruta o URL de la imagen
-              const img = product.images ?
-                `<img src="http://localhost/airrestaurant/img/${product.images[0].photo_archive_name}" style="width: 50px; height: 50px; border-radius: 5px;">`
-                : 'Sin imagen';
+              const img = product.images && product.images.length > 0 ?
+                `<img src="http://localhost/airrestaurant/img/${product.images[0].photo_archive_name}" style="width: 50px; height: 50px; border-radius: 5px;">` :
+                'Sin imagen';
+              const category = product.category ?
+                product.category.name :
+                'Sin categoría';
               row.innerHTML = `
-                <td>${product.id}</td>
-                <td>${product.name}</td>
-                <td>${product.description}</td>
-                <td>${product.base_price}</td>
-                <td>${img}</td>
-                <td>
-                  <button class="btn btn-warning btn-sm" onclick='editProduct(${JSON.stringify(product)})'>Editar</button>
-                  <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Eliminar</button>
-                </td>
-              `;
+                        <td>${product.id}</td>
+                        <td>${product.name}</td>
+                        <td>${product.description}</td>
+                        <td>${product.base_price}</td>
+                        <td>${category}</td>
+                        <td>${img}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick='editProduct(${JSON.stringify(product)})'>Editar</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteProduct(${product.id})">Eliminar</button>
+                        </td>
+                    `;
               tbody.appendChild(row);
             });
             document.getElementById('products-list').style.display = '';
@@ -492,25 +523,29 @@
     }
 
     function openProductModal(mode = "create", productData = null) {
-      if (mode === "create") {
-        document.getElementById("productModalTitle").innerText = "Crear Producto";
-        document.getElementById("productId").value = "";
-        document.getElementById("productName").value = "";
-        document.getElementById("productDescription").value = "";
-        document.getElementById("productPrice").value = "";
-        document.getElementById("productImg").value = "";
-      } else if (mode === "edit") {
-        document.getElementById("productModalTitle").innerText = "Editar Producto";
-        if (productData) {
-          document.getElementById("productId").value = productData.id;
-          document.getElementById("productName").value = productData.name;
-          document.getElementById("productDescription").value = productData.description;
-          document.getElementById("productPrice").value = productData.base_price;
-          document.getElementById("productImg").value = productData.images[0].photo_archive_name || "";
-          document.getElementById("imageId").value = productData.images[0].id || "";
+      loadCategories().then(() => {
+        if (mode === "create") {
+          document.getElementById("productModalTitle").innerText = "Crear Producto";
+          document.getElementById("productId").value = "";
+          document.getElementById("productName").value = "";
+          document.getElementById("productDescription").value = "";
+          document.getElementById("productPrice").value = "";
+          document.getElementById("productImg").value = "";
+          document.getElementById("productCategory").value = "";
+        } else if (mode === "edit") {
+          document.getElementById("productModalTitle").innerText = "Editar Producto";
+          if (productData) {
+            document.getElementById("productId").value = productData.id;
+            document.getElementById("productName").value = productData.name;
+            document.getElementById("productDescription").value = productData.description;
+            document.getElementById("productPrice").value = productData.base_price;
+            document.getElementById("productImg").value = productData.images[0]?.photo_archive_name || "";
+            document.getElementById("imageId").value = productData.images[0]?.id || "";
+            document.getElementById("productCategory").value = productData.category?.id || "";
+          }
         }
-      }
-      productModalInstance.show();
+        productModalInstance.show();
+      });
     }
 
     function editProduct(product) {
@@ -520,9 +555,9 @@
     function saveProduct(e) {
       e.preventDefault();
       const id = document.getElementById('productId').value;
-      const url = id
-        ? `http://localhost/airrestaurant/api/api.php?modal=product&id=${id}`
-        : 'http://localhost/airrestaurant/api/api.php?modal=product';
+      const url = id ?
+        `http://localhost/airrestaurant/api/api.php?modal=product&id=${id}` :
+        'http://localhost/airrestaurant/api/api.php?modal=product';
       const method = id ? 'PUT' : 'POST';
       const body = {
         id,
@@ -530,28 +565,49 @@
         description: document.getElementById('productDescription').value,
         base_price: document.getElementById('productPrice').value,
         img: document.getElementById('productImg').value,
-        imageId: document.getElementById('imageId').value
+        category_id: document.getElementById('productCategory').value // Agregar categoría
       };
       fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.status === 'Success') {
-          productModalInstance.hide();
-          fetchProducts();
-        } else {
-          alert('Ocurrió un error al guardar el producto.');
-        }
-      });
+          method,
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'Success') {
+            productModalInstance.hide();
+            fetchProducts();
+          } else {
+            alert('Ocurrió un error al guardar el producto.');
+          }
+        });
+    }
+
+    function loadCategories() {
+      return fetch('http://localhost/airrestaurant/api/api.php?modal=category')
+        .then(res => res.json())
+        .then(data => {
+          const categorySelect = document.getElementById('productCategory');
+          categorySelect.innerHTML = '';
+          if (data.status === 'Success') {
+            data.data.forEach(category => {
+              const option = document.createElement('option');
+              option.value = category.id;
+              option.textContent = category.name;
+              categorySelect.appendChild(option);
+            });
+          }
+        });
     }
 
     function deleteProduct(id) {
-        console.log(id);
+      console.log(id);
       if (confirm('¿Estás seguro de eliminar este producto?')) {
-        fetch(`http://localhost/airrestaurant/api/api.php?modal=product&id=${id}`, { method: 'DELETE' })
+        fetch(`http://localhost/airrestaurant/api/api.php?modal=product&id=${id}`, {
+            method: 'DELETE'
+          })
           .then(res => res.json())
           .then(data => {
             if (data.status === 'Success') fetchProducts();
@@ -571,20 +627,26 @@
           tbody.innerHTML = '';
           if (data.status === 'Success') {
             data.data.forEach(order => {
+              const user = order.user ? `${order.user.name} ${order.user.surnames}` : 'Sin usuario';
+              const card = order.card ? order.card.formattedCardNumber : 'Sin tarjeta';
+              const products = order.products && order.products.length > 0 ?
+                order.products.map(p => p.name || 'Producto desconocido').join(', ') :
+                'Sin productos';
+
               const row = document.createElement('tr');
               row.innerHTML = `
-                <td>${order.id}</td>
-                <td>${order.user_id}</td>
-                <td>${order.product_ids}</td>
-                <td>${order.order_price}</td>
-                <td>${order.order_price_total}</td>
-                <td>${order.offer_id}</td>
-                <td>${order.created_at || ''}</td>
-                <td>
-                  <button class="btn btn-warning btn-sm" onclick='editOrder(${JSON.stringify(order)})'>Editar</button>
-                  <button class="btn btn-danger btn-sm" onclick="deleteOrder(${order.id})">Eliminar</button>
-                </td>
-              `;
+                        <td>${order.id}</td>
+                        <td>${user}</td>
+                        <td>${products}</td>
+                        <td>${order.order_price || '0.00'}</td>
+                        <td>${order.order_price_total || '0.00'}</td>
+                        <td>${card}</td>
+                        <td>${order.created_at || 'Sin fecha'}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick='editOrder(${JSON.stringify(order)})'>Editar</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteOrder(${order.id})">Eliminar</button>
+                        </td>
+                    `;
               tbody.appendChild(row);
             });
             document.getElementById('orders-list').style.display = '';
@@ -598,64 +660,128 @@
         });
     }
 
+    // Cargar usuarios en el selector
+    function loadUsers() {
+      fetch('http://localhost/airrestaurant/api/api.php?modal=user')
+        .then(res => res.json())
+        .then(data => {
+          const userSelect = document.getElementById('orderUserId');
+          userSelect.innerHTML = '';
+          if (data.status === 'Success') {
+            data.data.forEach(user => {
+              const option = document.createElement('option');
+              option.value = user.id;
+              option.textContent = `${user.name} ${user.surnames}`;
+              userSelect.appendChild(option);
+            });
+          }
+        });
+    }
+
+    // Cargar productos en el selector
+    function loadProducts() {
+      fetch('http://localhost/airrestaurant/api/api.php?modal=product')
+        .then(res => res.json())
+        .then(data => {
+          const productSelect = document.getElementById('orderProductIds');
+          productSelect.innerHTML = '';
+          if (data.status === 'Success') {
+            data.data.forEach(product => {
+              const option = document.createElement('option');
+              option.value = product.id;
+              option.textContent = `${product.name} - $${product.base_price}`;
+              option.dataset.price = product.base_price;
+              productSelect.appendChild(option);
+            });
+          }
+        });
+    }
+
+    // Abrir modal de pedidos
     function openOrderModal(mode = "create", orderData = null) {
+      loadUsers();
+      loadProducts();
+
       if (mode === "create") {
         document.getElementById("orderModalTitle").innerText = "Crear Pedido";
         document.getElementById("orderId").value = "";
         document.getElementById("orderUserId").value = "";
         document.getElementById("orderProductIds").value = "";
         document.getElementById("orderTotal").value = "";
-        document.getElementById("orderStatus").value = "pending";
       } else if (mode === "edit") {
         document.getElementById("orderModalTitle").innerText = "Editar Pedido";
         if (orderData) {
           document.getElementById("orderId").value = orderData.id;
           document.getElementById("orderUserId").value = orderData.user_id;
-          document.getElementById("orderProductIds").value = orderData.product_ids;
-          document.getElementById("orderTotal").value = orderData.total;
-          document.getElementById("orderStatus").value = orderData.status;
+          document.getElementById("orderTotal").value = orderData.order_price_total;
+
+          setTimeout(() => {
+            const productSelect = document.getElementById("orderProductIds");
+            const selectedProducts = orderData.products.map(p => p.id);
+            Array.from(productSelect.options).forEach(option => {
+              option.selected = selectedProducts.includes(parseInt(option.value));
+            });
+          }, 500);
         }
       }
       orderModalInstance.show();
     }
 
+    // Guardar pedido
+    function saveOrder(e) {
+      e.preventDefault();
+      const id = document.getElementById('orderId').value;
+      const url = id ?
+        `http://localhost/airrestaurant/api/api.php?modal=order&id=${id}` :
+        'http://localhost/airrestaurant/api/api.php?modal=order';
+      const method = id ? 'PUT' : 'POST';
+
+      // Construir el cuerpo de la solicitud
+      const products = Array.from(document.getElementById('orderProductIds').selectedOptions).map(option => ({
+        id: parseInt(option.value),
+        quantity: 1, // Puedes ajustar esto si necesitas manejar cantidades
+        custom_price: parseFloat(option.dataset.price) // Asegúrate de que el precio esté en el atributo `data-price`
+      }));
+
+      const body = {
+        user_id: parseInt(document.getElementById('orderUserId').value),
+        card_id: null, // Opcional
+        address_id: null, // Opcional
+        order_price: parseFloat(document.getElementById('orderTotal').value),
+        order_price_total: parseFloat(document.getElementById('orderTotal').value), // Puedes ajustar esto si es necesario
+        offer_id: null, // Opcional
+        products: products
+      };
+      console.log(JSON.stringify(body)); // Verifica el cuerpo que se está enviando
+      fetch(url, {
+          method,
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'Success') {
+            orderModalInstance.hide();
+            fetchOrders();
+          } else {
+            alert('Ocurrió un error al guardar el pedido.');
+          }
+        });
+    }
+
+    document.getElementById('orderForm').addEventListener('submit', saveOrder);
+
     function editOrder(order) {
       openOrderModal('edit', order);
     }
 
-    function saveOrder(e) {
-      e.preventDefault();
-      const id = document.getElementById('orderId').value;
-      const url = id
-        ? `http://localhost/airrestaurant/api/api.php?modal=order&id=${id}`
-        : 'http://localhost/airrestaurant/api/api.php?modal=order';
-      const method = id ? 'PUT' : 'POST';
-      const body = {
-        id,
-        user_id: document.getElementById('orderUserId').value,
-        product_ids: document.getElementById('orderProductIds').value,
-        total: document.getElementById('orderTotal').value,
-        status: document.getElementById('orderStatus').value
-      };
-      fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.status === 'Success') {
-          orderModalInstance.hide();
-          fetchOrders();
-        } else {
-          alert('Ocurrió un error al guardar el pedido.');
-        }
-      });
-    }
-
     function deleteOrder(id) {
       if (confirm('¿Estás seguro de eliminar este pedido?')) {
-        fetch(`http://localhost/airrestaurant/api/api.php?modal=order&id=${id}`, { method: 'DELETE' })
+        fetch(`http://localhost/airrestaurant/api/api.php?modal=order&id=${id}`, {
+            method: 'DELETE'
+          })
           .then(res => res.json())
           .then(data => {
             if (data.status === 'Success') fetchOrders();
@@ -663,8 +789,7 @@
           });
       }
     }
-
-    document.getElementById('orderForm').addEventListener('submit', saveOrder);
   </script>
 </body>
+
 </html>

@@ -4,29 +4,32 @@ include_once(__DIR__ . "/Images.php");
 include_once(__DIR__ . "/CategoriesDAO.php");
 include_once(__DIR__ . "/../config/DataBase.php");
 
-class ProductsDAO {
-    
-    public static function getAll() {
+class ProductsDAO
+{
+
+    public static function getAll()
+    {
         $db = DataBase::connect();
         $stmtProductos = $db->prepare("SELECT * FROM products");
         if (!$stmtProductos) {
-            die("Error en la preparación de la consulta: " . mysqli_error($db)); 
+            die("Error en la preparación de la consulta: " . mysqli_error($db));
         }
         $stmtProductos->execute();
         $resultProductos = $stmtProductos->get_result();
-    
+
         $products = [];
         while ($product = $resultProductos->fetch_object('Product')) {
             $product->setImages(ProductsDAO::findImagesProduct($product->getId()));
             $product->setCategory(CategoriesDAO::find($product->getCategory_id()));
             $products[] = $product;
         }
-    
+
         $db->close();
         return $products;
     }
 
-    public static function getAllApi(){
+    public static function getAllApi()
+    {
         $connection = DataBase::connect();
         $stmt = $connection->prepare("SELECT * FROM products");
         if (!$stmt) {
@@ -54,7 +57,8 @@ class ProductsDAO {
         return $products;
     }
 
-    public static function getOrderProducts($orderId){
+    public static function getOrderProducts($orderId)
+    {
         $db = DataBase::connect();
         $stmt = $db->prepare("SELECT * FROM order_product WHERE order_id = ?");
         if (!$stmt) {
@@ -75,7 +79,8 @@ class ProductsDAO {
         $db->close();
         return $products;
     }
-    public static function convertToProductCart(Product $product, $cuantity) {
+    public static function convertToProductCart(Product $product, $cuantity)
+    {
         $productCart = new ProductCart();
         $productCart->setId($product->getId());
         $productCart->setName($product->getName());
@@ -85,13 +90,14 @@ class ProductsDAO {
         $productCart->setImages($product->getImages());
         $productCart->setCategory($product->getCategory());
         $productCart->setCuantity($cuantity);
-        
+
 
         return $productCart;
-    } 
-    
+    }
 
-    public static function find($id) {
+
+    public static function find($id)
+    {
         $db = DataBase::connect();
         $stmtProduct = $db->prepare("SELECT * FROM products WHERE id = ?");
         $stmtProduct->bind_param("i", $id);
@@ -103,24 +109,35 @@ class ProductsDAO {
         $db->close();
         return $product;
     }
-    public static function findApi($id) {
-        $connection = DataBase::connect();
-        $stmt = $connection->prepare("SELECT * FROM products WHERE id = ?");
+
+    public static function findApi($id)
+    {
+        $db = DataBase::connect();
+        $stmt = $db->prepare("SELECT * FROM products WHERE id = ?");
+        if (!$stmt) {
+            die("Error en la preparación de la consulta de selección de producto: " . mysqli_error($db));
+        }
         $stmt->bind_param("i", $id);
         if (!$stmt->execute()) {
-            die("Error al ejecutar la consulta: " . mysqli_error($connection));
+            die("Error al ejecutar la consulta de selección de producto: " . mysqli_error($db));
         }
         $result = $stmt->get_result();
-        $product = $result->fetch_assoc();
+        $product = $result->fetch_assoc(); // Obtener los datos del producto como un array asociativo
+        if ($product) {
+            error_log("Producto encontrado: " . print_r($product, true));
+        } else {
+            error_log("Producto no encontrado para ID: " . $id);
+        }
         $stmt->close();
-        $connection->close();
-        return $product;
+        $db->close();
+        return $product ? $product : null; // Devolver null si no se encuentra el producto
     }
 
-    public static function storeWithIngredients($producto, $ingredientes) {
+    public static function storeWithIngredients($producto, $ingredientes)
+    {
         $connection = DataBase::connect();
         $stmt = $connection->prepare("INSERT INTO products (name, description, base_price) VALUES (?, ?, ?)");
-        
+
         if (!$stmt) {
             die("Error en la preparación de la consulta de inserción del producto: " . mysqli_error($connection));
         }
@@ -131,7 +148,7 @@ class ProductsDAO {
         if (!$stmt->execute()) {
             die("Error al ejecutar la consulta de inserción del producto: " . mysqli_error($connection));
         }
-        $productId = $connection->insert_id;  
+        $productId = $connection->insert_id;
         $stmt->close();
         foreach ($ingredientes as $data) {
             $ingrediente = $data['ingredient'];
@@ -140,8 +157,8 @@ class ProductsDAO {
                 die("Error en la preparación de la consulta de inserción de ingrediente: " . mysqli_error($connection));
             }
             $ingredientId = $ingrediente->getId();
-            $quantity = $data['quantity']; 
-            $isOptional = $data['isOptional']; 
+            $quantity = $data['quantity'];
+            $isOptional = $data['isOptional'];
             $isChargedExtra = $ingrediente->getExtra_price() > 0 ? 1 : 0;
             $stmtIngredient->bind_param("iiiii", $productId, $ingredientId, $quantity, $isOptional, $isChargedExtra);
             if (!$stmtIngredient->execute()) {
@@ -151,8 +168,9 @@ class ProductsDAO {
         }
         $connection->close();
     }
-    
-    public static function store($product){
+
+    public static function store($product)
+    {
         $db = DataBase::connect();
         $stmt = $db->prepare("INSERT INTO products (name, description, base_price, category_id) VALUES (?, ?, ?, ?)");
         if (!$stmt) {
@@ -173,7 +191,8 @@ class ProductsDAO {
         return $productId;
     }
 
-    public static function storeImage($productId, $imageName) {
+    public static function storeImage($productId, $imageName)
+    {
         $db = DataBase::connect();
         $stmt = $db->prepare("INSERT INTO products_images (product_id, photo_archive_name) VALUES (?, ?)");
         if (!$stmt) {
@@ -186,10 +205,11 @@ class ProductsDAO {
         $stmt->close();
         return true;
     }
-    
-    
 
-    public static function destroy($id) {
+
+
+    public static function destroy($id)
+    {
         $db = DataBase::connect();
         $stmt = $db->prepare("DELETE FROM products WHERE id = ?");
         $stmt->bind_param("i", $id);
@@ -199,14 +219,14 @@ class ProductsDAO {
         $stmt->close();
         $db->close();
         return true;
-        
     }
 
-    public static function findImagesProduct($id){
+    public static function findImagesProduct($id)
+    {
         $db = DataBase::connect();
         $query = "SELECT * FROM products_images WHERE product_id = ?";
         $stmtImages = $db->prepare($query);
-        $stmtImages->bind_param("i",$id);
+        $stmtImages->bind_param("i", $id);
         $stmtImages->execute();
         $resultImages = $stmtImages->get_result();
         $images = [];
@@ -216,7 +236,8 @@ class ProductsDAO {
         $db->close();
         return $images;
     }
-    public static function findImagesProductApi($id){
+    public static function findImagesProductApi($id)
+    {
         $db = DataBase::connect();
         $query = "SELECT * FROM products_images WHERE product_id = ?";
         $stmtImages = $db->prepare($query);
@@ -235,22 +256,24 @@ class ProductsDAO {
         $db->close();
         return $images;
     }
-    public static function findCategoryProduct($idCategory){
+    public static function findCategoryProduct($idCategory)
+    {
         $db = DataBase::connect();
         $query = "SELECT * FROM categories WHERE id = ?";
         $stmtCategories = $db->prepare($query);
-        $stmtCategories->bind_param("i",$id);
+        $stmtCategories->bind_param("i", $id);
         $stmtCategories->execute();
         $resultCategories = $stmtCategories->get_result();
         $category = $resultCategories->fetch_object('Categories');
         $db->close();
         return $category;
     }
-    public static function findCategoryProductApi($idCategory){
+    public static function findCategoryProductApi($idCategory)
+    {
         $db = DataBase::connect();
         $query = "SELECT * FROM categories WHERE id = ?";
         $stmtCategories = $db->prepare($query);
-        $stmtCategories->bind_param("i", $idCategory); 
+        $stmtCategories->bind_param("i", $idCategory);
         $stmtCategories->execute();
         $resultCategories = $stmtCategories->get_result();
         if ($row = $resultCategories->fetch_assoc()) {
@@ -268,16 +291,18 @@ class ProductsDAO {
         return $category;
     }
 
-    public static function updateAll($id, $data) {
+    public static function updateAll($id, $data)
+    {
         $db = DataBase::connect();
-        $stmt = $db->prepare("UPDATE products SET name = ?, description = ?, base_price = ? WHERE id = ?");
+        $stmt = $db->prepare("UPDATE products SET name = ?, description = ?, base_price = ?, category_id = ? WHERE id = ?");
         if (!$stmt) {
             die("Error en la preparación de la consulta de actualización: " . mysqli_error($db));
         }
         $name = $data['name'];
         $description = $data['description'];
+        $category_id = $data['category_id'];
         $base_price = $data['base_price'];
-        $stmt->bind_param("ssdi", $name, $description, $base_price, $id);
+        $stmt->bind_param("ssdii", $name, $description, $base_price, $category_id, $id);
         if (!$stmt->execute()) {
             die("Error al ejecutar la consulta de actualización: " . mysqli_error($db));
         }
@@ -285,7 +310,8 @@ class ProductsDAO {
         ProductsDAO::updateImage($data['imageId'], $data['img']);
         return true;
     }
-    public static function updateImage($id, $imageName) {
+    public static function updateImage($id, $imageName)
+    {
         $db = DataBase::connect();
         $stmt = $db->prepare("UPDATE products_images SET photo_archive_name = ? WHERE id = ?");
         if (!$stmt) {
@@ -298,6 +324,4 @@ class ProductsDAO {
         $stmt->close();
         return true;
     }
-    
 }
-?>

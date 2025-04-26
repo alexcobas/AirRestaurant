@@ -76,6 +76,15 @@ switch ($metodo) {
                         echo json_encode(['status' => 'Error', 'mensaje' => 'No se pudieron obtener los pedidos.']);
                     }
                     break;
+                case 'category':
+                    $categories = apiController::getCategories();
+                    if (is_array($categories)) {
+                        echo json_encode(['status' => 'Success', 'data_count' => count($categories), 'data' => $categories]);
+                    } else {
+                        http_response_code(500);
+                        echo json_encode(['status' => 'Error', 'mensaje' => 'No se pudieron obtener las categorias.']);
+                    }
+                    break;
                 default:
                     http_response_code(400);
                     echo json_encode(['status' => 'Error', 'mensaje' => 'Modal no válido']);
@@ -111,13 +120,13 @@ switch ($metodo) {
                     }
                     break;
                 case 'order':
-                    // $result = apiController::createOrder($data);
+                    $result = apiController::createOrder($data);
                     if ($result) {
                         http_response_code(201);
                         echo json_encode(['status' => 'Success', 'mensaje' => 'Pedido creado correctamente.', 'data' => $result]);
                     } else {
                         http_response_code(500);
-                        echo json_encode(['status' => 'Error', 'mensaje' => 'No se pudo crear el pedido.']);
+                        echo json_encode(['status' => 'Error', 'mensaje' => 'No se pudo crear el pedido.', 'result' => $result]);
                     }
                     break;
                 default:
@@ -224,4 +233,3 @@ switch ($metodo) {
         echo json_encode(['status' => 'Error', 'mensaje' => 'Método no permitido']);
         break;
 }
-?>

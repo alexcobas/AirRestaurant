@@ -142,15 +142,18 @@ class Order
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
-            'user' => $this->user ? $this->user->toArray() : null, // Si 'user' es un objeto, también lo convierto a array
+            'user' => $this->user ? $this->user->toArray() : null,
             'card_id' => $this->card_id,
-            'card' => $this->card ? $this->card->toArray() : null, // Si 'card' es un objeto, lo convierto
+            'card' => $this->card ? $this->card->toArray() : null, 
             'address_id' => $this->address_id,
-            'address' => $this->address ? $this->address->toArray() : null, // Si 'address' es un objeto, lo convierto
+            'address' => $this->address ? $this->address->toArray() : null,
             'order_price' => $this->order_price,
             'order_price_total' => $this->order_price_total,
             'offer_id' => $this->offer_id,
-            'products' => $this->products, // Suponiendo que es un array de productos, lo mantengo
+            'products' => array_map(function($product) {
+                return is_array($product) ? $product : $product->toArray();
+            }, $this->products),
+            'created_at' => $this->getDate(),
         ];
     }
 }
