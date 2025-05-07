@@ -1,6 +1,6 @@
 <?php
 class DataBase{
-    public static function connect($host='localhost', $user='root', $password='Informatica_1', $database='AirRestaurant', $port='3307'){
+    public static function connect($host='nozomi.proxy.rlwy.net', $user='root', $password='IDqcmYwaArNlnCfydHQRICaTcrchnPvs', $database='AirRestaurant', $port='15275'){
         $connection = new mysqli($host, $user, $password, $database,$port);
 
         if ($connection == false) {
